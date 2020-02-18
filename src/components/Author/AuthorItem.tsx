@@ -1,12 +1,10 @@
 import * as React from 'react';
-import {Avatar, Box, Card, createStyles, Theme, Typography} from "@material-ui/core";
+import {useCallback, useContext} from 'react';
+import {Avatar, Box, createStyles, Theme, Typography} from "@material-ui/core";
 import {Face} from '@material-ui/icons';
-import {useCallback, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Author} from "./AuthorPage";
 import {useHistory} from "react-router";
-import {useContext} from "react";
-import {AudioContext} from "../../context/AudioContext";
+import {AudioContext, Author} from "../../context/AudioContext";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,6 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const AuthorItem = (initialAuthor: Author) => {
     const classes = useStyles();
+
+    const {state, dispatch, author} = useContext(AudioContext);
 
     let history = useHistory();
     const getAuthor = useCallback((id: string) => {

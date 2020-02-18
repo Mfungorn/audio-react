@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {useContext, useReducer} from "react";
-import {State} from "./AudioReducer";
+import {useEffect, useReducer} from 'react';
 
 export type Author = {
     id: string,
@@ -20,14 +19,12 @@ export type Genre = {
 }
 
 enum Action {
+    'INIT_STATE',
     'GET_AUTHORS', 'GET_ALBUMS', 'GET_TRACKS', 'GET_GENRES',
     'GET_AUTHOR', 'GET_ALBUM', 'GET_TRACK', 'GET_GENRE',
     'SEARCH'
 }
-type AudioContextAction = {
-    type: Action,
-    payload: any
-}
+
 type AudioContextState = {
     authors: Array<Author> | null,
     albums: Array<Album> | null,
@@ -41,18 +38,28 @@ type PageState = {
 }
 export type State = AudioContextState & PageState
 
+interface AudioContextAction extends State {
+    type: Action
+}
+
 export type AudioContext = {
     authors: Array<Author>,
     albums: Array<Album>,
     tracks: Array<Track>,
-    genres: Array<Genre>
+    genres: Array<Genre>,
+    author: Author,
+    album: Album,
+    track: Track
 }
 
 const audioContext: AudioContext = {
     authors: Array<Author>(),
     albums: Array<Album>(),
     tracks: Array<Track>(),
-    genres: Array<Genre>()
+    genres: Array<Genre>(),
+    author: null,
+    album: null,
+    track: null
 };
 
 const initialState: State = {
@@ -69,17 +76,29 @@ const reducer = (state: State, action: AudioContextAction) => {
     switch (action.type) {
         case Action.GET_AUTHORS: return {
             ...state,
-            authors: action.payload
+            authors: action.authors
         };
         case Action.GET_AUTHOR: return {
             ...state,
-            author: action.payload
+            author: action.author
         }
     }
 };
 
 export const AudioContext = React.createContext<AudioContext>(audioContext);
 export const AudioContextProvider = props => {
-    const [state, dispatch] = useReducer(reducer, initialState)
-    
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        dispatch({
+            type: Action.INIT_STATE,
+            authors: Array<Author>(),
+            albums: Array<Album>(),
+            tracks: Array<Track>(),
+            genres: Array<Genre>(),
+            author: null,
+            album: null,
+            track: null
+        })
+    })
 };
