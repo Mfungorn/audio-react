@@ -19,6 +19,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import {AuthorPage} from "./Author/AuthorPage";
+import { AudioContextProvider } from '../context/AudioContext'
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -130,6 +131,7 @@ export const Root = () => {
     );
 
     return (
+        <AudioContextProvider>
             <Router history={history}>
                 {currentUser && <div className={classes.grow}>
                     <AppBar position="static">
@@ -179,5 +181,6 @@ export const Root = () => {
                 <Route path="/register" component={RegisterPage}/>
                 <Route path="/login" component={LoginPage}/>
             </Router>
+        </AudioContextProvider>
     )
 };
