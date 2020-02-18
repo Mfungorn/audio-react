@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {createContext, useEffect, useReducer} from 'react';
-// import useFetch from 'use-http'
+import useFetch from 'use-http'
 
 export type Author = {
     id: string,
@@ -66,61 +66,67 @@ const audioContext: AudioContext = {
 
 export const AudioContext = createContext(null);
 
-const initialState: State = {
-    authors: Array<Author>(),
-    albums: Array<Album>(),
-    tracks: Array<Track>(),
-    genres: Array<Genre>(),
-    author: null,
-    album: null,
-    track: null
+const initialState = {
+    id: null,
+    name: '',
+    surname: '',
 };
 
-const reducer = (state: State, action: AudioContextAction) => {
+const reducer = (state, action) => {
     switch (action.type) {
-        case Action.GET_AUTHORS: return {
-            ...state,
-            authors: action.authors
-        };
-        case Action.GET_AUTHOR: return {
-            ...state,
-            author: action.author
-        }
+        case 'INIT_STATE':
+            return {
+                ...state,
+                data: action.data,
+            }
+        case 'GET_AUTHORS':
+            return {
+                ...state,
+                data: action.data,
+            }
+        case 'GET_AUTHOR':
+            return {
+                ...state,
+                data: action.data,
+            }
+        default:
+            return state
     }
 };
 
 export const AudioContextProvider = props => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    // // Тут получишь данные из апи
-    // const { loading, error, data } = useFetch(
-    //     `${process.env.CDN_PATH}/api/`,
-    //     { data: [] },
-    //     [],
-    // )
+    // Тут получишь данные из апи
+    const { loading, error, data } = useFetch(
+        `http://www.mocky.io/v2/5e4c5f243100005700d8bf35`,
+        { data: [] },
+        [],
+    )
+
+    console.log('loading', loading)
+    console.log('error', error)
+    console.log('data', data)
 
     useEffect(() => {
         dispatch({
-            type: Action.INIT_STATE,
-            authors: Array<Author>(),
-            albums: Array<Album>(),
-            tracks: Array<Track>(),
-            genres: Array<Genre>(),
-            author: null,
-            album: null,
-            track: null
+            type: 'INIT_STATE',
+            id: data.id,
+            name: data.name,
+            surname: data.surname,
         })
-    })
+    }, [
+        data,
+    ])
 
     return (
         <AudioContext.Provider
             value={{
                 state,
                 dispatch,
-                // // И тут прокинешь полученные из апи данные
-                // loading,
-                // error,
-                // data,
+                loading,
+                error,
+                data,
             }}
             {...props}
         />
