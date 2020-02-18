@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {useEffect, useReducer} from 'react';
+import {useEffect, useReducer, createContext} from 'react';
+// import useFetch from 'use-http'
 
 export type Author = {
     id: string,
@@ -36,6 +36,7 @@ type PageState = {
     album: Album | null,
     track: Track | null
 }
+
 export type State = AudioContextState & PageState
 
 interface AudioContextAction extends State {
@@ -62,6 +63,10 @@ const audioContext: AudioContext = {
     track: null
 };
 
+
+
+export const AudioContext = createContext(null);
+
 const initialState: State = {
     authors: Array<Author>(),
     albums: Array<Album>(),
@@ -85,9 +90,15 @@ const reducer = (state: State, action: AudioContextAction) => {
     }
 };
 
-export const AudioContext = React.createContext<AudioContext>(audioContext);
 export const AudioContextProvider = props => {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    // // Тут получишь данные из апи
+    // const { loading, error, data } = useFetch(
+    //     `${process.env.CDN_PATH}/api/`,
+    //     { data: [] },
+    //     [],
+    // )
 
     useEffect(() => {
         dispatch({
@@ -101,4 +112,18 @@ export const AudioContextProvider = props => {
             track: null
         })
     })
+
+    return (
+        <AudioContext.Provider
+            value={{
+                state,
+                dispatch,
+                // // И тут прокинешь полученные из апи данные
+                // loading,
+                // error,
+                // data,
+            }}
+            {...props}
+        />
+    )
 };

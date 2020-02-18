@@ -1,12 +1,12 @@
 import * as React from 'react';
+import { AudioContextContext } from '../../context/AudioContext'
 import { authenticationService, userService } from '../../services';
 import {User} from "../Root";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import {List, ListItem} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Author} from "../Author/AuthorPage";
 import {AuthorItem} from "../Author/AuthorItem";
-
 
 const authors: Array<Author> = [
     { id: "1", name: "Unnamed Author 1" }, { id: "2", name: "Unnamed Author 2" }
@@ -21,6 +21,24 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 export const HomePage = () => {
+    const {
+        state,
+        dispatch,
+        // loading,
+        // error,
+        // data,
+        // // и полученные данные используешь тут
+    } = useContext(AudioContextContext)
+
+    // // При необходимости чтото изменить в стейте, вызываешь экшен и прокидываешь в него необходимые данные
+    // dispatch({
+    //     type: 'GET_AUTHORS',
+    //     author: 'author data',
+    // })
+
+
+
+
     const classes = useStyles();
     const [currentUser, setCurrentUser] = useState<User | null>();
     useEffect(() => {
@@ -29,6 +47,20 @@ export const HomePage = () => {
 
     return(
         <div>
+            { /* А дальше используешь эти данные, например еслипришел автор то выводим его */ }
+            {/*{ state.author && (
+                <>
+                    <p>
+                        <strong>ID</strong>
+                        <span>{state.author.id}</span>
+                    </p>
+                    <p>
+                        <strong>Author</strong>
+                        <span>{state.author.name}</span>
+                    </p>
+                </>
+            )}*/}
+
             <List className={classes.flexContainer}>
                 {authors.map(author => (
                     <AuthorItem key={author.id} id={author.id} name={author.name}/>
