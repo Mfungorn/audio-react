@@ -1,12 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import * as React from 'react';
+import { render } from 'react-dom'
+import {Root} from "./components/Root";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { configureFakeBackend } from './helpers/fakeApi';
+configureFakeBackend();
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+render(<Root />, document.getElementById('root'));
