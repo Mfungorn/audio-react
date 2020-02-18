@@ -1,4 +1,5 @@
-import {useEffect, useReducer, createContext} from 'react';
+import * as React from 'react';
+import {createContext, useEffect, useReducer} from 'react';
 // import useFetch from 'use-http'
 
 export type Author = {
@@ -62,8 +63,6 @@ const audioContext: AudioContext = {
     album: null,
     track: null
 };
-
-
 
 export const AudioContext = createContext(null);
 

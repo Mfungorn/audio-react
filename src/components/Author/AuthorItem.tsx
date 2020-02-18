@@ -18,7 +18,11 @@ const useStyles = makeStyles((theme: Theme) =>
 export const AuthorItem = (initialAuthor: Author) => {
     const classes = useStyles();
 
-    const {state, dispatch, author} = useContext(AudioContext);
+    const {
+        state,
+        dispatch,
+        author
+    } = useContext(AudioContext);
 
     let history = useHistory();
     const getAuthor = useCallback((id: string) => {

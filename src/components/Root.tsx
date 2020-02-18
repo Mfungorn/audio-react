@@ -1,14 +1,13 @@
 import * as React from 'react'
-import {Router, Route} from 'react-router-dom'
-import {NoMatch} from './NoMatch'
+import {useCallback, useEffect, useState} from 'react'
+import {Route, Router} from 'react-router-dom'
 import {history} from "../helpers";
 import {authenticationService} from "../services";
 import {PrivateRoute} from "./PrivateRoute";
 import {HomePage} from "./HomePage/HomePage";
 import {LoginPage} from "./LoginPage/LoginPage";
 import {RegisterPage} from "./SignUpPage/RegisterPage";
-import {useCallback, useEffect, useState} from "react";
-import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -143,7 +142,7 @@ export const Root = () => {
                                 <MenuIcon/>
                             </IconButton>
                             <Typography className={classes.title} variant="h6" noWrap>
-                                Material-UI
+                                Audio
                             </Typography>
                             <div className={classes.grow}/>
                             <div className={classes.sectionDesktop}>

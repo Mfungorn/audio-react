@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { AudioContextContext } from '../../context/AudioContext'
-import { authenticationService, userService } from '../../services';
+import {useContext, useEffect, useState} from 'react';
+import {AudioContext, Author} from '../../context/AudioContext'
+import {authenticationService} from '../../services';
 import {User} from "../Root";
-import {useEffect, useState, useContext} from "react";
-import {List, ListItem} from "@material-ui/core";
+import {List} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {Author} from "../Author/AuthorPage";
 import {AuthorItem} from "../Author/AuthorItem";
 
 const authors: Array<Author> = [
-    { id: "1", name: "Unnamed Author 1" }, { id: "2", name: "Unnamed Author 2" }
+    {id: "1", name: "Unnamed Author 1"}, {id: "2", name: "Unnamed Author 2"}
 ];
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -28,15 +27,13 @@ export const HomePage = () => {
         // error,
         // data,
         // // и полученные данные используешь тут
-    } = useContext(AudioContextContext)
+    } = useContext(AudioContext)
 
     // // При необходимости чтото изменить в стейте, вызываешь экшен и прокидываешь в него необходимые данные
     // dispatch({
     //     type: 'GET_AUTHORS',
     //     author: 'author data',
     // })
-
-
 
 
     const classes = useStyles();
