@@ -1,8 +1,8 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
-import {Avatar, Box, Card, createStyles, Theme, Typography} from "@material-ui/core";
+import {Box, createStyles, Theme} from "@material-ui/core";
 import {useParams} from "react-router";
-import {useEffect, useState} from "react";
 import {Author} from "../../context/AudioContext";
 
 
@@ -14,11 +14,6 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
 
     }));
-const onDidGetAuthor = () => {
-    setTimeout(() => {
-
-    }, 1000)
-};
 
 export const AuthorPage = () => {
     const classes = useStyles();

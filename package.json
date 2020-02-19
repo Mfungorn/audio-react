@@ -28,7 +28,8 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "formik": "latest",
-    "yup": "latest"
+    "yup": "latest",
+    "use-http": "latest"
   },
   "scripts": {
     "start": "webpack-dev-server -d --content-base ./public",

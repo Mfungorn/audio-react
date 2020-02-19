@@ -1,40 +1,38 @@
 import * as React from 'react';
-import {useContext, useEffect, useState} from 'react';
-import {AudioContext, Author} from '../../context/AudioContext'
+import {useEffect, useState} from 'react';
+import {Author} from '../../context/AudioContext'
 import {authenticationService} from '../../services';
 import {User} from "../Root";
-import {List} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {AuthorItem} from "../Author/AuthorItem";
+import {AuthorList} from "../Author/AuthorList";
 
 const authors: Array<Author> = [
-    {id: "1", name: "Unnamed Author 1"}, {id: "2", name: "Unnamed Author 2"}
+    {id: "1", name: "Unnamed Author 1"},
+    {id: "2", name: "Unnamed Author 2"},
+    {id: "3", name: "Unnamed Author 3"},
+    {id: "4", name: "Unnamed Author 4"},
+    {id: "5", name: "Unnamed Author 5"}
 ];
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
-    flexContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        padding: 0,
-    }
+
 }));
 
 export const HomePage = () => {
-    const {
-        state,
-        dispatch,
-        // loading,
-        // error,
-        // data,
-        // // и полученные данные используешь тут
-    } = useContext(AudioContext)
+    // const {
+    //     state,
+    //     dispatch,
+    //     // loading,
+    //     // error,
+    //     // data,
+    //     // // и полученные данные используешь тут
+    // } = useContext(AudioContext)
 
     // // При необходимости чтото изменить в стейте, вызываешь экшен и прокидываешь в него необходимые данные
     // dispatch({
     //     type: 'GET_AUTHORS',
     //     author: 'author data',
     // })
-
 
     const classes = useStyles();
     const [currentUser, setCurrentUser] = useState<User | null>();
@@ -57,12 +55,7 @@ export const HomePage = () => {
                     </p>
                 </>
             )}*/}
-
-            <List className={classes.flexContainer}>
-                {authors.map(author => (
-                    <AuthorItem key={author.id} id={author.id} name={author.name}/>
-                ))}
-            </List>
+            <AuthorList authors={authors}/>
         </div>
     );
 };
