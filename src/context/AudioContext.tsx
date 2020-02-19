@@ -75,6 +75,11 @@ const audioContext: AudioContext = {
 
 export const AudioContext = createContext(null);
 
+// const initialState = {
+//     id: null,
+//     name: '',
+//     surname: '',
+// };
 const initialState: State = {
     authors: Array<Author>(),
     albums: Array<Album>(),
@@ -109,6 +114,8 @@ const reducer = (state: State, action: AudioContextAction) => {
                 ...state,
                 authors: action.authors
             };
+        default:
+            return state
     }
 };
 
@@ -116,19 +123,38 @@ export const AudioContextProvider = props => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // Тут получишь данные из апи
+    // const { loading, error, data } = useFetch(
+    //     `http://www.mocky.io/v2/5e4c5f243100005700d8bf35`,
+    //     { data: [] },
+    //     [],
+    // )
+    //
+    // console.log('loading', loading)
+    // console.log('error', error)
+    // console.log('data', data)
     const {loading, error, data} = useFetch(
         `${process.env.CDN_PATH}/api/`,
         {data: []},
         [],
     );
 
+    // useEffect(() => {
+    //     dispatch({
+    //         type: 'INIT_STATE',
+    //         id: data.id,
+    //         name: data.name,
+    //         surname: data.surname,
+    //     })
+    // }, [
+    //     data,
+    // ])
     useEffect(() => {
         dispatch({
             type: Action.INIT_STATE,
-            authors: initialState.authors,
-            albums: initialState.albums,
-            tracks: initialState.tracks,
-            genres: initialState.genres,
+            authors: data.authors,
+            albums: data.albums,
+            tracks: data.tracks,
+            genres: data.genres,
             author: initialState.author,
             album: initialState.album,
             track: initialState.track,
@@ -136,7 +162,7 @@ export const AudioContextProvider = props => {
             albumId: initialState.albumId,
             trackId: initialState.trackId
         })
-    });
+    }, [data]);
 
     return (
         <AudioContext.Provider

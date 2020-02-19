@@ -9,6 +9,8 @@ import {RouteComponentProps, useHistory} from "react-router";
 import {ThemedButton} from "../ThemedButton";
 import {useEffect} from "react";
 import {CircularProgress, Grid} from "@material-ui/core";
+import {useContext} from "react";
+import {AudioContext} from "../../context/AudioContext";
 
 
 interface RouterProps {
@@ -19,7 +21,26 @@ interface Props extends RouteComponentProps<RouterProps> {
     // Add your regular properties here
 }
 
+
 export const LoginPage = (props: Props) => {
+    const {
+        state,
+        dispatch,
+        // loading,
+        // error,
+        // data,
+        // // и полученные данные используешь тут
+    } = useContext(AudioContext)
+
+    console.log('state', state)
+
+    const onClickHandler = () => {
+        dispatch({
+            type: 'GET_AUTHORS',
+            author: 'author data test',
+        })
+    }
+
     let history = useHistory();
     useEffect(() => {
         // redirect to home if already logged in
@@ -111,6 +132,8 @@ export const LoginPage = (props: Props) => {
                     </CardContent>
                 </Card>
             </Grid>
+
+            <button>TEST</button>
         </Grid>
     )
 };
