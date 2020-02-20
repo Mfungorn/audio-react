@@ -1,8 +1,10 @@
 import * as React from 'react';
+import {useCallback} from 'react';
 import {Avatar, Card, CardActionArea, CardContent, CardMedia, createStyles, Theme, Typography} from "@material-ui/core";
 import {Face} from '@material-ui/icons';
 import {makeStyles} from "@material-ui/core/styles";
 import {Author} from "../../context/AudioContext";
+import {useHistory} from "react-router";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,28 +21,18 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }));
 
-export const AuthorItem = (initialAuthor: Author) => {
+export const AuthorItem = (props: { author: Author }) => {
     const classes = useStyles();
 
-    // const {
-    //     state,
-    //     dispatch,
-    //     response,
-    //     error,
-    //     isLoading
-    // } = useContext(AudioContext);
-    //
-    // let history = useHistory();
-    // const onAuthorClick = (id: string) => {
-    //     dispatch({
-    //         type: Action.GET_AUTHOR,
-    //         authorId: id
-    //     })
-    // };
+    let history = useHistory();
+    const onAuthorClick = useCallback((id: string) => {
+        console.log(id);
+        history.push(`/${id}`)
+    }, [history]);
 
     return (
         <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea onClick={e => onAuthorClick(props.author.id)}>
                 <CardMedia style={{
                     textAlign: 'center'
                 }}>
@@ -50,7 +42,7 @@ export const AuthorItem = (initialAuthor: Author) => {
                 </CardMedia>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2" style={{textAlign: 'center'}}>
-                        {initialAuthor.name}
+                        {props.author.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p"
                                 style={{paddingLeft: 20, paddingRight: 20}}>

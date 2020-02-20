@@ -1,5 +1,12 @@
 export function configureFakeBackend() {
-    let users = [{ id: 1, email: 'test@test.com', password: 'test'}];
+    let users = [{id: 1, email: 'test@test.com', password: 'test'}];
+    const authors = [
+        {id: "1", name: "Unnamed Author 1"},
+        {id: "2", name: "Unnamed Author 2"},
+        {id: "3", name: "Unnamed Author 3"},
+        {id: "4", name: "Unnamed Author 4"},
+        {id: "5", name: "Unnamed Author 5"}
+    ];
     let realFetch = window.fetch;
     window.fetch = function (url, opts) {
         const isLoggedIn = opts.headers['Authorization'] === 'Bearer fake-jwt-token';
@@ -13,8 +20,6 @@ export function configureFakeBackend() {
                     const user = users.find(x => x.email === params.email && x.password === params.password);
                     if (!user) return error('email or password is incorrect');
                     return ok({
-                        id: user.id,
-                        email: user.email,
                         token: 'fake-jwt-token'
                     });
                 }
@@ -31,9 +36,18 @@ export function configureFakeBackend() {
                 }
 
                 // get users - secure
-                if (url.endsWith('/users') && opts.method === 'GET') {
+                if (url.endsWith('/authors') && opts.method === 'GET') {
                     if (!isLoggedIn) return unauthorised();
-                    return ok(users);
+                    return ok(authors);
+                }
+
+                const regex = new RegExp('\\d');
+                const n = url.lastIndexOf('/');
+                if (url.substring(n + 1).match(regex) && opts.method === 'GET') {
+                    if (!isLoggedIn) return unauthorised();
+                    const id = parseInt(url.substring(n + 1));
+                    const author = authors.find(author => author.id === id);
+                    return ok(author);
                 }
 
                 // pass through any requests not handled above
@@ -42,7 +56,7 @@ export function configureFakeBackend() {
                 // private helper functions
 
                 function ok(body) {
-                    resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(body)) })
+                    resolve({ok: true, text: () => Promise.resolve(JSON.stringify(body))})
                 }
 
                 function unauthorised() {

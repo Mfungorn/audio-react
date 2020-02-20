@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {createContext, useEffect, useReducer} from 'react';
 import useFetch from 'use-http'
+import config from "../config/config";
 
 export type Author = {
     id: string,
@@ -21,9 +22,17 @@ export type Genre = {
 
 export enum Action {
     'INIT_STATE',
-    'GET_AUTHORS', 'GET_ALBUMS', 'GET_TRACKS', 'GET_GENRES',
-    'GET_AUTHOR', 'GET_ALBUM', 'GET_TRACK', 'GET_GENRE',
-    'SEARCH'
+    'REQUEST_AUTHORS',
+    'REQUEST_ALBUMS',
+    'REQUEST_TRACKS',
+    'REQUEST_GENRES',
+    'REQUEST_AUTHOR',
+    'REQUEST_ALBUM',
+    'REQUEST_TRACK',
+    'REQUEST_GENRE',
+    'SEARCH',
+    'ERROR',
+    'LOADING'
 }
 
 type AudioContextState = {
@@ -36,12 +45,13 @@ type PageState = {
     author: Author | null,
     album: Album | null,
     track: Track | null,
-    authorId: string,
-    albumId: string,
-    trackId: string
+}
+type RequestState = {
+    error: any,
+    loading: boolean
 }
 
-export type State = AudioContextState & PageState
+export type State = AudioContextState & PageState & RequestState
 
 interface AudioContextAction extends State {
     type: Action
@@ -55,23 +65,7 @@ export type AudioContext = {
     author: Author,
     album: Album,
     track: Track,
-    authorId: string,
-    albumId: string,
-    trackId: string,
 }
-
-const audioContext: AudioContext = {
-    authors: Array<Author>(),
-    albums: Array<Album>(),
-    tracks: Array<Track>(),
-    genres: Array<Genre>(),
-    author: null,
-    album: null,
-    track: null,
-    authorId: '',
-    albumId: '',
-    trackId: ''
-};
 
 export const AudioContext = createContext(null);
 
@@ -88,9 +82,8 @@ const initialState: State = {
     author: null,
     album: null,
     track: null,
-    authorId: '',
-    albumId: '',
-    trackId: ''
+    error: null,
+    loading: false
 };
 
 const reducer = (state: State, action: AudioContextAction) => {
@@ -105,14 +98,63 @@ const reducer = (state: State, action: AudioContextAction) => {
                 author: action.author,
                 album: action.album,
                 track: action.track,
-                authorId: action.authorId,
-                albumId: action.albumId,
-                trackId: action.trackId
             };
-        case Action.GET_AUTHORS:
+        case Action.REQUEST_AUTHORS:
             return {
                 ...state,
-                authors: action.authors
+                authors: action.authors,
+                loading: false
+            };
+        case Action.REQUEST_ALBUMS:
+            return {
+                ...state,
+                albums: action.albums,
+                loading: false
+            };
+        case Action.REQUEST_TRACKS:
+            return {
+                ...state,
+                tracks: action.tracks,
+                loading: false
+            };
+        case Action.REQUEST_GENRES:
+            return {
+                ...state,
+                genres: action.genres,
+                loading: false
+            };
+        case Action.REQUEST_AUTHOR:
+            return {
+                ...state,
+                author: action.author,
+                loading: false
+            };
+        case Action.REQUEST_ALBUM:
+            return {
+                ...state,
+                album: action.album,
+                loading: false
+            };
+        case Action.REQUEST_TRACK:
+            return {
+                ...state,
+                track: action.track,
+                loading: false
+            };
+        case Action.SEARCH:
+            return {
+                ...state
+            };
+        case Action.LOADING:
+            return {
+                ...state,
+                loading: true
+            };
+        case Action.ERROR:
+            return {
+                ...state,
+                error: action.error,
+                loading: false
             };
         default:
             return state
@@ -123,31 +165,16 @@ export const AudioContextProvider = props => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // Тут получишь данные из апи
-    // const { loading, error, data } = useFetch(
-    //     `http://www.mocky.io/v2/5e4c5f243100005700d8bf35`,
-    //     { data: [] },
-    //     [],
-    // )
-    //
-    // console.log('loading', loading)
-    // console.log('error', error)
-    // console.log('data', data)
     const {loading, error, data} = useFetch(
-        `${process.env.CDN_PATH}/api/`,
+        config.apiUrl,
         {data: []},
         [],
     );
 
-    // useEffect(() => {
-    //     dispatch({
-    //         type: 'INIT_STATE',
-    //         id: data.id,
-    //         name: data.name,
-    //         surname: data.surname,
-    //     })
-    // }, [
-    //     data,
-    // ])
+    console.log('loading', loading);
+    console.log('error', error);
+    console.log('data', data);
+
     useEffect(() => {
         dispatch({
             type: Action.INIT_STATE,
@@ -158,11 +185,12 @@ export const AudioContextProvider = props => {
             author: initialState.author,
             album: initialState.album,
             track: initialState.track,
-            authorId: initialState.authorId,
-            albumId: initialState.albumId,
-            trackId: initialState.trackId
+            error: null,
+            loading: false
         })
-    }, [data]);
+    }, [
+        data
+    ]);
 
     return (
         <AudioContext.Provider

@@ -3,10 +3,10 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import {registrationService} from '../../services';
 import {RouteComponentProps, useHistory} from "react-router";
 import {CircularProgress, Grid, Typography} from "@material-ui/core";
 import {ThemedButton} from "../ThemedButton";
+import {useAuth} from "../../context/AuthContext";
 
 
 interface RouterProps {
@@ -19,6 +19,8 @@ interface Props extends RouteComponentProps<RouterProps> {
 
 export const RegisterPage = (props: Props) => {
     let history = useHistory();
+
+    const auth = useAuth();
 
     return (
         <Grid
@@ -36,9 +38,7 @@ export const RegisterPage = (props: Props) => {
                             Sign Up
                         </Typography>
                         <Formik
-                            initialValues={
-                                {email: '', password: ''}
-                            }
+                            initialValues={{email: '', password: ''}}
                             validationSchema={
                                 Yup.object().shape({
                                     email: Yup.string().required('Email is required'),
@@ -47,7 +47,7 @@ export const RegisterPage = (props: Props) => {
                             onSubmit={
                                 ({email, password}, {setStatus, setSubmitting}) => {
                                     setStatus();
-                                    registrationService.register(email, password)
+                                    auth.signUp(email, password)
                                         .then(
                                             user => {
                                                 history.goBack();
@@ -82,7 +82,7 @@ export const RegisterPage = (props: Props) => {
                                         <div className="form-group">
                                             <ThemedButton type="submit" className="btn btn-primary"
                                                           disabled={isSubmitting}>Sign Up</ThemedButton>
-                                            {isSubmitting && <CircularProgress />}
+                                            {isSubmitting && <CircularProgress size={24}/>}
                                         </div>
                                         {status && <div className={'alert alert-danger'}>{status}</div>}
                                     </Form>

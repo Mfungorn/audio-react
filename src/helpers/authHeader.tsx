@@ -1,11 +1,11 @@
-import {authenticationService} from '../services';
+import {USER} from "../context/AuthContext";
 
-export function authHeader() {
+export const authHeader = () => {
     // return authorization header with jwt token
-    const currentUser = authenticationService.currentUserValue;
+    const currentUser = JSON.parse(localStorage.getItem(USER));
     if (currentUser && currentUser.token) {
-        return { Authorization: `Bearer ${currentUser.token}` };
+        return {Authorization: `Bearer ${currentUser.token}`};
     } else {
         return {};
     }
-}
+};

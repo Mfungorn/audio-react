@@ -36,8 +36,7 @@ export const AuthorList = (items: { authors: Author[] }) => {
                     <Grid item>
                         <AuthorItem
                             key={author.id}
-                            id={author.id}
-                            name={author.name}
+                            author={author}
                         />
                     </Grid>
                 ))}

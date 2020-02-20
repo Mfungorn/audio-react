@@ -1,16 +1,14 @@
 import * as React from 'react';
+import {useCallback} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import {authenticationService} from '../../services';
-import {RouteComponentProps, useHistory} from "react-router";
+import {RouteComponentProps, useHistory, useLocation} from "react-router";
 import {ThemedButton} from "../ThemedButton";
-import {useEffect} from "react";
-import {CircularProgress, Grid} from "@material-ui/core";
-import {useContext} from "react";
-import {AudioContext} from "../../context/AudioContext";
+import {Button, CircularProgress, Grid} from "@material-ui/core";
+import {useAuth} from "../../context/AuthContext";
 
 
 interface RouterProps {
@@ -21,33 +19,29 @@ interface Props extends RouteComponentProps<RouterProps> {
     // Add your regular properties here
 }
 
-
 export const LoginPage = (props: Props) => {
-    const {
-        state,
-        dispatch,
-        // loading,
-        // error,
-        // data,
-        // // и полученные данные используешь тут
-    } = useContext(AudioContext)
+    // const {
+    //     state,
+    //     dispatch,
+    //     currentUser,
+    //     loading,
+    //     error,
+    //     data,
+    // } = useContext(AudioContext);
 
-    console.log('state', state)
-
-    const onClickHandler = () => {
-        dispatch({
-            type: 'GET_AUTHORS',
-            author: 'author data test',
-        })
-    }
+    const [signIn] = useAuth();
 
     let history = useHistory();
-    useEffect(() => {
-        // redirect to home if already logged in
-        if (authenticationService.currentUserValue) {
-            history.push('/');
-        }
-    });
+    let location = useLocation();
+
+    const onSignUpButtonClicked = useCallback((e) => {
+        history.push("/register")
+    }, [history]);
+
+    const onLoginSubmit = useCallback(() => {
+        const {from}: any = location.state || {from: {pathname: "/"}};
+        history.push(from);
+    }, [history, location]);
 
     return (
         <Grid
@@ -64,16 +58,8 @@ export const LoginPage = (props: Props) => {
                         <Typography variant="h5" component="h5">
                             Login
                         </Typography>
-                        <button onClick={(e) => {
-                            props.history.push("/register")
-                        }
-                        }>
-                            Haven't an account yet?
-                        </button>
                         <Formik
-                            initialValues={
-                                {email: '', password: ''}
-                            }
+                            initialValues={{email: '', password: ''}}
                             validationSchema={
                                 Yup.object().shape({
                                     email: Yup.string().required('Email is required'),
@@ -82,11 +68,10 @@ export const LoginPage = (props: Props) => {
                             onSubmit={
                                 ({email, password}, {setStatus, setSubmitting}) => {
                                     setStatus();
-                                    authenticationService.login(email, password)
+                                    signIn(email, password)
                                         .then(
                                             user => {
-                                                const {from}: any = props.location.state || {from: {pathname: "/"}};
-                                                props.history.push(from);
+                                                onLoginSubmit()
                                             },
                                             error => {
                                                 setSubmitting(false);
@@ -116,14 +101,20 @@ export const LoginPage = (props: Props) => {
                                             <ErrorMessage name="password" component="div" className="invalid-feedback"/>
                                         </div>
                                         <div className="form-group">
-                                            <ThemedButton
-                                                type="submit"
-                                                className="btn btn-primary"
-                                                disabled={isSubmitting}
-                                            >
-                                                Login
-                                            </ThemedButton>
-                                            {isSubmitting && <CircularProgress />}
+                                            {isSubmitting
+                                                ? <CircularProgress size={24}/>
+                                                : (
+                                                    <ThemedButton
+                                                        type="submit"
+                                                        className="btn btn-primary"
+                                                        disabled={isSubmitting}
+                                                    >
+                                                        Login
+                                                    </ThemedButton>
+                                                )}
+                                            <Button onClick={onSignUpButtonClicked}>
+                                                <span>Haven't an account yet?</span>
+                                            </Button>
                                         </div>
                                         {status && <div className={'alert alert-danger'}>{status}</div>}
                                     </Form>
