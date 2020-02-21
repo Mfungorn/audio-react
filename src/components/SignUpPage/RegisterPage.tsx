@@ -20,7 +20,7 @@ interface Props extends RouteComponentProps<RouterProps> {
 export const RegisterPage = (props: Props) => {
     let history = useHistory();
 
-    const auth = useAuth();
+    const {user, signUp} = useAuth();
 
     return (
         <Grid
@@ -29,9 +29,14 @@ export const RegisterPage = (props: Props) => {
             direction="column"
             alignItems="center"
             justify="center"
-            style={{minHeight: '100vh'}}
+            style={{
+                minHeight: '100vh',
+                minWidth: '100vh'
+            }}
         >
-            <Grid item xs={3}>
+            <Grid item style={{
+                width: '25%'
+            }}>
                 <Card>
                     <CardContent>
                         <Typography variant="h5" component="h5">
@@ -47,7 +52,7 @@ export const RegisterPage = (props: Props) => {
                             onSubmit={
                                 ({email, password}, {setStatus, setSubmitting}) => {
                                     setStatus();
-                                    auth.signUp(email, password)
+                                    signUp(email, password)
                                         .then(
                                             user => {
                                                 history.goBack();

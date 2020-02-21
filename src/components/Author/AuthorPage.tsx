@@ -28,7 +28,9 @@ export const AuthorPage = () => {
     const options = {
         timeout: 15000,
         retries: 1,
-        header: authHeader()
+        headers: {
+            Authorization: authHeader().Authorization
+        }
     };
 
     const [req, res] = useFetch(`${config.apiUrl}/authors`, options);
@@ -46,7 +48,7 @@ export const AuthorPage = () => {
     }, [req, dispatch]);
 
     useEffect(() => {
-        console.log(props);
+        console.log('author props', props);
         fetchAuthor(props.id)
             .then(value => {
                 dispatch({
@@ -55,7 +57,7 @@ export const AuthorPage = () => {
                 })
             })
             .catch(error => {
-                console.log(error);
+                console.log('error', error);
                 dispatch({
                     type: Action.ERROR,
                     error: error

@@ -87,6 +87,8 @@ const initialState: State = {
 };
 
 const reducer = (state: State, action: AudioContextAction) => {
+    console.log(action);
+
     switch (action.type) {
         case Action.INIT_STATE:
             return {
@@ -98,48 +100,49 @@ const reducer = (state: State, action: AudioContextAction) => {
                 author: action.author,
                 album: action.album,
                 track: action.track,
+                loading: action.loading
             };
         case Action.REQUEST_AUTHORS:
             return {
                 ...state,
                 authors: action.authors,
-                loading: false
+                loading: action.loading
             };
         case Action.REQUEST_ALBUMS:
             return {
                 ...state,
                 albums: action.albums,
-                loading: false
+                loading: action.loading
             };
         case Action.REQUEST_TRACKS:
             return {
                 ...state,
                 tracks: action.tracks,
-                loading: false
+                loading: action.loading
             };
         case Action.REQUEST_GENRES:
             return {
                 ...state,
                 genres: action.genres,
-                loading: false
+                loading: action.loading
             };
         case Action.REQUEST_AUTHOR:
             return {
                 ...state,
                 author: action.author,
-                loading: false
+                loading: action.loading
             };
         case Action.REQUEST_ALBUM:
             return {
                 ...state,
                 album: action.album,
-                loading: false
+                loading: action.loading
             };
         case Action.REQUEST_TRACK:
             return {
                 ...state,
                 track: action.track,
-                loading: false
+                loading: action.loading
             };
         case Action.SEARCH:
             return {
@@ -148,7 +151,7 @@ const reducer = (state: State, action: AudioContextAction) => {
         case Action.LOADING:
             return {
                 ...state,
-                loading: true
+                loading: action.loading
             };
         case Action.ERROR:
             return {
@@ -186,7 +189,7 @@ export const AudioContextProvider = props => {
             album: initialState.album,
             track: initialState.track,
             error: null,
-            loading: false
+            loading: true
         })
     }, [
         data
@@ -200,7 +203,7 @@ export const AudioContextProvider = props => {
                 // И тут прокинешь полученные из апи данные
                 data,
                 error,
-                loading,
+                loading
             }}
             {...props}
         />

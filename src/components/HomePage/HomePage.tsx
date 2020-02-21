@@ -52,7 +52,7 @@ export const HomePage = () => {
                 })
             })
             .catch(error => {
-                console.log(error);
+                console.log('error', error);
                 dispatch({
                     type: Action.ERROR,
                     error: error

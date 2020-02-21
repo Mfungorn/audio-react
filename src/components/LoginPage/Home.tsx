@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useCallback, useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useAuth} from "../../context/AuthContext";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
@@ -14,9 +14,8 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import {AuthorList} from "../Author/AuthorList";
 import {CircularProgress} from "@material-ui/core";
 import {Action, AudioContext, Author} from "../../context/AudioContext";
-import useFetch from "use-http/dist";
 import config from "../../config";
-import {authHeader} from "../../helpers";
+import {authHeader, handleResponse} from "../../helpers";
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -50,50 +49,53 @@ export const Home = props => {
     const classes = useStyles();
 
     // Get auth state and re-render anytime it changes
-    const [user, signOut] = useAuth();
+    const {user, signOut} = useAuth();
+    console.log('home user', user);
 
     const {
         state, dispatch,
-        response, error, loading
+        data, error, loading
     } = useContext(AudioContext);
 
     const options = {
         timeout: 15000,
         retries: 1,
-        header: authHeader()
+        headers: {
+            Authorization: authHeader().Authorization
+        }
     };
 
-    const [req, res] = useFetch(config.apiUrl, options);
-
-    const fetchAuthors = useCallback(() => {
+    useEffect(() => {
         dispatch({
             type: Action.LOADING,
+            loading: true
         });
 
-        async function fetchAuthors(): Promise<Array<Author>> {
-            return await req.get(`/authors`);
+        async function fetchAuthors(): Promise<Author[]> {
+            return await fetch(`${config.apiUrl}/authors`, {
+                method: 'GET',
+                headers: authHeader()
+            }).then(handleResponse)
         }
 
-        return fetchAuthors()
-    }, [req, dispatch]);
-
-    useEffect(() => {
         fetchAuthors()
             .then(value => {
-                console.log(value);
+                console.log('home authors', value);
                 dispatch({
                     type: Action.REQUEST_AUTHORS,
-                    authors: value
+                    authors: value,
+                    loading: false
                 })
             })
             .catch(error => {
-                console.log(error);
+                console.log('error', error);
                 dispatch({
                     type: Action.ERROR,
-                    error: error
+                    error: error,
+                    loading: false
                 })
             })
-    }, [dispatch, fetchAuthors]);
+    }, []);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);

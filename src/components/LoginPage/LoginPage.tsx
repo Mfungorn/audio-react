@@ -29,7 +29,8 @@ export const LoginPage = (props: Props) => {
     //     data,
     // } = useContext(AudioContext);
 
-    const [signIn] = useAuth();
+    const {user, signIn} = useAuth();
+    console.log('sign in', signIn);
 
     let history = useHistory();
     let location = useLocation();
@@ -50,9 +51,14 @@ export const LoginPage = (props: Props) => {
             direction="column"
             alignItems="center"
             justify="center"
-            style={{minHeight: '100vh'}}
+            style={{
+                minHeight: '100vh',
+                minWidth: '100vh'
+            }}
         >
-            <Grid item xs={3}>
+            <Grid item style={{
+                width: '25%'
+            }}>
                 <Card>
                     <CardContent>
                         <Typography variant="h5" component="h5">
@@ -123,8 +129,6 @@ export const LoginPage = (props: Props) => {
                     </CardContent>
                 </Card>
             </Grid>
-
-            <button>TEST</button>
         </Grid>
     )
 };

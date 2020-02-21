@@ -5,6 +5,8 @@ import {useAuth} from "../context/AuthContext";
 
 export default ({component: Component, ...routeProps}) => {
     const [user] = useAuth();
+    console.log(user);
+
     return (
         <Route {...routeProps} render={props => (
             user ? (
