@@ -1,11 +1,15 @@
 import * as React from 'react';
-import {createContext, useEffect, useReducer} from 'react';
-import useFetch from 'use-http'
-import config from "../config/config";
+import {createContext, useReducer} from 'react';
 
 export type Author = {
     id: string,
-    name: string
+    name: string,
+    bio: string,
+    logo: string,
+    rating: number,
+    genres: Array<Genre> | null,
+    albums: Array<Album> | null,
+    compositions: Array<Track> | null,
 }
 export type Album = {
     id: string,
@@ -31,8 +35,6 @@ export enum Action {
     'REQUEST_TRACK',
     'REQUEST_GENRE',
     'SEARCH',
-    'ERROR',
-    'LOADING'
 }
 
 type AudioContextState = {
@@ -46,12 +48,8 @@ type PageState = {
     album: Album | null,
     track: Track | null,
 }
-type RequestState = {
-    error: any,
-    loading: boolean
-}
 
-export type State = AudioContextState & PageState & RequestState
+export type State = AudioContextState & PageState
 
 interface AudioContextAction extends State {
     type: Action
@@ -69,11 +67,6 @@ export type AudioContext = {
 
 export const AudioContext = createContext(null);
 
-// const initialState = {
-//     id: null,
-//     name: '',
-//     surname: '',
-// };
 const initialState: State = {
     authors: Array<Author>(),
     albums: Array<Album>(),
@@ -82,8 +75,6 @@ const initialState: State = {
     author: null,
     album: null,
     track: null,
-    error: null,
-    loading: false
 };
 
 const reducer = (state: State, action: AudioContextAction) => {
@@ -100,64 +91,45 @@ const reducer = (state: State, action: AudioContextAction) => {
                 author: action.author,
                 album: action.album,
                 track: action.track,
-                loading: action.loading
             };
         case Action.REQUEST_AUTHORS:
             return {
                 ...state,
                 authors: action.authors,
-                loading: action.loading
             };
         case Action.REQUEST_ALBUMS:
             return {
                 ...state,
                 albums: action.albums,
-                loading: action.loading
             };
         case Action.REQUEST_TRACKS:
             return {
                 ...state,
                 tracks: action.tracks,
-                loading: action.loading
             };
         case Action.REQUEST_GENRES:
             return {
                 ...state,
                 genres: action.genres,
-                loading: action.loading
             };
         case Action.REQUEST_AUTHOR:
             return {
                 ...state,
                 author: action.author,
-                loading: action.loading
             };
         case Action.REQUEST_ALBUM:
             return {
                 ...state,
                 album: action.album,
-                loading: action.loading
             };
         case Action.REQUEST_TRACK:
             return {
                 ...state,
                 track: action.track,
-                loading: action.loading
             };
         case Action.SEARCH:
             return {
                 ...state
-            };
-        case Action.LOADING:
-            return {
-                ...state,
-                loading: action.loading
-            };
-        case Action.ERROR:
-            return {
-                ...state,
-                error: action.error,
-                loading: false
             };
         default:
             return state
@@ -168,32 +140,30 @@ export const AudioContextProvider = props => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // Тут получишь данные из апи
-    const {loading, error, data} = useFetch(
-        config.apiUrl,
-        {data: []},
-        [],
-    );
+    // const {loading, error, data} = useFetch(
+    //     config.apiUrl,
+    //     {data: []},
+    //     [],
+    // );
+    //
+    // console.log('loading', loading);
+    // console.log('error', error);
+    // console.log('data', data);
 
-    console.log('loading', loading);
-    console.log('error', error);
-    console.log('data', data);
-
-    useEffect(() => {
-        dispatch({
-            type: Action.INIT_STATE,
-            authors: data.authors,
-            albums: data.albums,
-            tracks: data.tracks,
-            genres: data.genres,
-            author: initialState.author,
-            album: initialState.album,
-            track: initialState.track,
-            error: null,
-            loading: true
-        })
-    }, [
-        data
-    ]);
+    // useEffect(() => {
+    //     dispatch({
+    //         type: Action.INIT_STATE,
+    //         authors: data.authors,
+    //         albums: data.albums,
+    //         tracks: data.tracks,
+    //         genres: data.genres,
+    //         author: initialState.author,
+    //         album: initialState.album,
+    //         track: initialState.track,
+    //     })
+    // }, [
+    //     data
+    // ]);
 
     return (
         <AudioContext.Provider
@@ -201,9 +171,9 @@ export const AudioContextProvider = props => {
                 state,
                 dispatch,
                 // И тут прокинешь полученные из апи данные
-                data,
-                error,
-                loading
+                // data,
+                // error,
+                // loading
             }}
             {...props}
         />

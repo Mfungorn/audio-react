@@ -1,4 +1,4 @@
-import {TOKEN} from "../services";
+import {TOKEN} from "../context/AuthContext";
 
 export const handleResponse = async response => {
     let text = await response.text();

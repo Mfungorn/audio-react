@@ -5,8 +5,9 @@ import * as React from "react";
 import {RegisterPage} from "./SignUpPage/RegisterPage";
 import {LoginPage} from "./LoginPage/LoginPage";
 import {ProvideAuth} from "../context/AuthContext";
-import {Home} from "./LoginPage/Home";
+import {Home} from "./HomePage/Home";
 import {Authorize} from "./Authorize";
+import {AuthorPage} from "./Author/AuthorPage";
 
 
 export const Root = (props) => {
@@ -14,10 +15,11 @@ export const Root = (props) => {
         <AudioContextProvider>
             <ProvideAuth>
                 <Router history={history}>
-                    <Route path="/register" component={RegisterPage}/>
-                    <Route path="/login" component={LoginPage}/>
+                    <Route exact path="/register" component={RegisterPage}/>
+                    <Route exact path="/login" component={LoginPage}/>
                     <Authorize>
                         <Route path="/" component={Home}/>
+                        <Route path="/authors/:id" component={AuthorPage}/>
                     </Authorize>
                 </Router>
             </ProvideAuth>

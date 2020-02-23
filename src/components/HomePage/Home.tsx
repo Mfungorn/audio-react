@@ -15,7 +15,8 @@ import {AuthorList} from "../Author/AuthorList";
 import {CircularProgress} from "@material-ui/core";
 import {Action, AudioContext, Author} from "../../context/AudioContext";
 import config from "../../config";
-import {authHeader, handleResponse} from "../../helpers";
+import {authHeader} from "../../helpers";
+import useFetch from "use-http/dist";
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -49,12 +50,10 @@ export const Home = props => {
     const classes = useStyles();
 
     // Get auth state and re-render anytime it changes
-    const {user, signOut} = useAuth();
-    console.log('home user', user);
+    const {signOut} = useAuth();
 
     const {
-        state, dispatch,
-        data, error, loading
+        state, dispatch
     } = useContext(AudioContext);
 
     const options = {
@@ -65,17 +64,13 @@ export const Home = props => {
         }
     };
 
-    useEffect(() => {
-        dispatch({
-            type: Action.LOADING,
-            loading: true
-        });
+    const {
+        request, loading, error
+    } = useFetch<Array<Author>>(`${config.apiUrl}/authors/all`, options);
 
+    useEffect(() => {
         async function fetchAuthors(): Promise<Author[]> {
-            return await fetch(`${config.apiUrl}/authors`, {
-                method: 'GET',
-                headers: authHeader()
-            }).then(handleResponse)
+            return await request.get()
         }
 
         fetchAuthors()
@@ -84,16 +79,10 @@ export const Home = props => {
                 dispatch({
                     type: Action.REQUEST_AUTHORS,
                     authors: value,
-                    loading: false
                 })
             })
             .catch(error => {
                 console.log('error', error);
-                dispatch({
-                    type: Action.ERROR,
-                    error: error,
-                    loading: false
-                })
             })
     }, []);
 
@@ -163,7 +152,7 @@ export const Home = props => {
 
     return (
         <>
-            {user && <div className={classes.grow}>
+            {!loading && <div className={classes.grow}>
                 <AppBar position="static">
                     <Toolbar>
                         <IconButton
@@ -206,19 +195,14 @@ export const Home = props => {
                 {renderMobileMenu}
                 {renderMenu}
             </div>}
-            {user && <div>
-                {state.authors && <AuthorList authors={state.authors}/>}
+            <div>
+                {!loading && <AuthorList authors={state.authors}/>}
                 {loading &&
                 <div style={{width: '100%', height: '100%'}}>
-                    <CircularProgress style={{
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        marginTop: 'auto',
-                        marginBottom: 'auto'
-                    }} size={24}/>
+                    <CircularProgress size={24}/>
                 </div>}
                 {error && <h4>{error.message}</h4>}
-            </div>}
+            </div>
         </>
     );
 };

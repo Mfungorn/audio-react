@@ -6,6 +6,9 @@ import {Author} from "../../context/AudioContext";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
 
+export type AuthorListProps = {
+    authors: Author[]
+}
 const useStyles = makeStyles((theme: Theme) => createStyles({
     flexContainer: {
         display: 'grid',
@@ -17,22 +20,24 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
-export const AuthorList = (items: { authors: Author[] }) => {
+export const AuthorList = (props: AuthorListProps) => {
+    console.log('author list items', props);
+
     const classes = useStyles();
 
     const [visibleAuthorsCount, setVisibleAuthorsCount] = useState<number>(4);
     const expandAuthorsList = useCallback(() => {
         visibleAuthorsCount === 4 ? (
-            setVisibleAuthorsCount(items.authors.length)
+            setVisibleAuthorsCount(props.authors.length)
         ) : (
             setVisibleAuthorsCount(4)
         )
-    }, [items.authors, visibleAuthorsCount, setVisibleAuthorsCount]);
+    }, [props.authors, visibleAuthorsCount, setVisibleAuthorsCount]);
 
     return (
         <div style={{paddingTop: '3%'}}>
             <Grid container className={classes.flexContainer}>
-                {items.authors.slice(0, visibleAuthorsCount).map(author => (
+                {props.authors.slice(0, visibleAuthorsCount).map(author => (
                     <Grid item>
                         <AuthorItem
                             key={author.id}

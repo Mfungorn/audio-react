@@ -2,21 +2,24 @@ import * as React from 'react';
 import {createContext, useCallback, useContext, useEffect, useState} from 'react';
 import config from "../config/config";
 import {handleResponse} from "../helpers";
-import {TOKEN} from "../services";
 
 
 export type User = {
     username: string,
     email: string
 }
-export const USER = 'user';
+export const TOKEN = 'token';
+export type Token = {
+    accessToken: string,
+    tokenType: string
+}
 
 export const AuthContext = createContext(null);
 
 // Provider component that wraps your app and makes auth object ...
 // ... available to any child component that calls useAuth().
 export const ProvideAuth = (props) => {
-    const [user, setUser] = useState(null);
+    const [token, setToken] = useState<Token>(null);
 
     let signIn = useCallback((email, password) => {
         const requestOptions = {
@@ -25,47 +28,47 @@ export const ProvideAuth = (props) => {
             body: JSON.stringify({email, password})
         };
 
-        return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
+        return fetch(`${config.apiUrl}/auth/login`, requestOptions)
             .then(handleResponse)
             .then(response => {
-                setUser(response.token);
-                return response.token;
+                setToken(response);
+                return response.accessToken;
             })
             .catch(error => {
                 console.log('sign in error', error)
             });
     }, []);
 
-    let signUp = useCallback((email, password) => {
+    let signUp = useCallback((name, email, password) => {
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email, password})
+            body: JSON.stringify({name, email, password})
         };
 
-        return fetch(`${config.apiUrl}/users/register`, requestOptions)
+        return fetch(`${config.apiUrl}/auth/register/customer`, requestOptions)
     }, []);
 
 
     const signOut = useCallback(() => {
-        setUser(false);
+        setToken(null);
     }, []);
 
 
     useEffect(() => {
-        console.log('auth user', user);
-        if (user) {
-            setUser(user);
-            localStorage.setItem(USER, JSON.stringify(user));
+        console.log('auth token', token);
+        if (token) {
+            setToken(token);
+            localStorage.setItem(TOKEN, JSON.stringify(token));
         } else {
-            setUser(false);
+            setToken(null);
             localStorage.removeItem(TOKEN);
         }
-    }, [user]);
+    }, [token]);
 
     return <AuthContext.Provider
         value={{
-            user,
+            token,
             signIn,
             signUp,
             signOut

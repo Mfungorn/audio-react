@@ -20,7 +20,7 @@ interface Props extends RouteComponentProps<RouterProps> {
 export const RegisterPage = (props: Props) => {
     let history = useHistory();
 
-    const {user, signUp} = useAuth();
+    const {signUp} = useAuth();
 
     return (
         <Grid
@@ -43,16 +43,17 @@ export const RegisterPage = (props: Props) => {
                             Sign Up
                         </Typography>
                         <Formik
-                            initialValues={{email: '', password: ''}}
+                            initialValues={{username: '', email: '', password: ''}}
                             validationSchema={
                                 Yup.object().shape({
+                                    username: Yup.string().required('Username is required'),
                                     email: Yup.string().required('Email is required'),
                                     password: Yup.string().required('Password is required')
                                 })}
                             onSubmit={
-                                ({email, password}, {setStatus, setSubmitting}) => {
+                                ({username, email, password}, {setStatus, setSubmitting}) => {
                                     setStatus();
-                                    signUp(email, password)
+                                    signUp(username, email, password)
                                         .then(
                                             user => {
                                                 history.goBack();
@@ -66,6 +67,14 @@ export const RegisterPage = (props: Props) => {
                             render={
                                 ({errors, status, touched, isSubmitting}) => (
                                     <Form>
+                                        <div className="form-group">
+                                            <label htmlFor="text">Username</label>
+                                            <Field
+                                                name="username"
+                                                className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')}
+                                            />
+                                            <ErrorMessage name="username" component="div" className="invalid-feedback"/>
+                                        </div>
                                         <div className="form-group">
                                             <label htmlFor="email">Email Address</label>
                                             <Field

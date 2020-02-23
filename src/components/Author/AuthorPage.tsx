@@ -36,10 +36,6 @@ export const AuthorPage = () => {
     const [req, res] = useFetch(`${config.apiUrl}/authors`, options);
 
     const fetchAuthor = useCallback((id: string) => {
-        dispatch({
-            type: Action.LOADING,
-        });
-
         async function fetchAuthor(id: string): Promise<Author> {
             return await req.get(`/${id}`);
         }
@@ -58,22 +54,18 @@ export const AuthorPage = () => {
             })
             .catch(error => {
                 console.log('error', error);
-                dispatch({
-                    type: Action.ERROR,
-                    error: error
-                })
             })
     }, [props, dispatch, fetchAuthor]);
 
     return (
         <div style={{width: '100%', height: '100%'}}>
-            {loading && <CircularProgress style={{
+            {loading || <CircularProgress style={{
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 marginTop: 'auto',
                 marginBottom: 'auto'
             }} size={24}/>}
-            {state.author && <Box display="flex" justifyContent="flex-start" m={1} p={1} bgcolor="background.paper">
+            {state.author || <Box display="flex" justifyContent="flex-start" m={1} p={1} bgcolor="background.paper">
                 <Box p={1} bgcolor="grey.300">
                     Author
                 </Box>

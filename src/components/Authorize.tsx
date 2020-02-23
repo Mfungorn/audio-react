@@ -5,13 +5,13 @@ import {useHistory} from "react-router";
 
 export const Authorize = props => {
     const [isAuthorized, setAuthorized] = useState(false);
-    const {user} = useAuth();
-    console.log('authorize user', user);
+    const {token} = useAuth();
+    console.log('authorize user', token);
 
     let history = useHistory();
 
     useEffect(() => {
-        if (user) {
+        if (token) {
             setAuthorized(true);
             console.log('set authorized', true);
         } else {
@@ -19,7 +19,7 @@ export const Authorize = props => {
             console.log('set authorized', false);
             history.replace('/login', null)
         }
-    }, [user]);
+    }, [token]);
 
     return <>{isAuthorized ? props.children : null}</>
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useCallback} from 'react';
+import {useCallback, useEffect} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import Card from '@material-ui/core/Card';
@@ -29,11 +29,19 @@ export const LoginPage = (props: Props) => {
     //     data,
     // } = useContext(AudioContext);
 
-    const {user, signIn} = useAuth();
+    const {token, signIn} = useAuth();
     console.log('sign in', signIn);
 
     let history = useHistory();
     let location = useLocation();
+
+    // check if already authenticate
+    useEffect(() => {
+        if (token) {
+            const {from}: any = location.state || {from: {pathname: "/"}};
+            history.push(from);
+        }
+    }, [token]);
 
     const onSignUpButtonClicked = useCallback((e) => {
         history.push("/register")
@@ -76,7 +84,7 @@ export const LoginPage = (props: Props) => {
                                     setStatus();
                                     signIn(email, password)
                                         .then(
-                                            user => {
+                                            token => {
                                                 onLoginSubmit()
                                             },
                                             error => {
