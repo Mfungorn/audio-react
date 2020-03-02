@@ -13,14 +13,23 @@ export type Author = {
 }
 export type Album = {
     id: string,
-    title: string
+    title: string,
+    cover: string,
+    rating: number,
+    genres: Array<Genre> | null,
+    authors: Array<Author> | null,
+    compositions: Array<Track> | null,
 }
 export type Track = {
     id: string,
     title: string,
+    duration: number,
+    text: string,
+    cover: string,
     price: number
 }
 export type Genre = {
+    id: string,
     name: string
 }
 

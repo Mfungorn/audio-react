@@ -13,10 +13,11 @@ import Typography from "@material-ui/core/Typography";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import {AuthorList} from "../Author/AuthorList";
 import {CircularProgress} from "@material-ui/core";
-import {Action, AudioContext, Author} from "../../context/AudioContext";
+import {Action, Album, AudioContext, Author} from "../../context/AudioContext";
 import config from "../../config";
 import {authHeader} from "../../helpers";
 import useFetch from "use-http/dist";
+import {AlbumList} from "../Album/AlbumList";
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -66,11 +67,11 @@ export const Home = props => {
 
     const {
         request, loading, error
-    } = useFetch<Array<Author>>(`${config.apiUrl}/authors/all`, options);
+    } = useFetch<Array<Author>>(`${config.apiUrl}`, options);
 
     useEffect(() => {
         async function fetchAuthors(): Promise<Author[]> {
-            return await request.get()
+            return await request.get("/authors/all")
         }
 
         fetchAuthors()
@@ -79,6 +80,24 @@ export const Home = props => {
                 dispatch({
                     type: Action.REQUEST_AUTHORS,
                     authors: value,
+                })
+            })
+            .catch(error => {
+                console.log('error', error);
+            })
+    }, []);
+
+    useEffect(() => {
+        async function fetchAlbums(): Promise<Album[]> {
+            return await request.get("/albums/all")
+        }
+
+        fetchAlbums()
+            .then(value => {
+                console.log('home albums', value);
+                dispatch({
+                    type: Action.REQUEST_ALBUMS,
+                    albums: value,
                 })
             })
             .catch(error => {
@@ -196,7 +215,14 @@ export const Home = props => {
                 {renderMenu}
             </div>}
             <div>
-                {!loading && <AuthorList authors={state.authors}/>}
+                {!loading && <>
+                    <h1>Authors</h1>
+                    <AuthorList authors={state.authors}/>
+                </>}
+                {!loading && <>
+                    <h1>Albums</h1>
+                    <AlbumList albums={state.albums}/>
+                </>}
                 {loading &&
                 <div style={{width: '100%', height: '100%'}}>
                     <CircularProgress size={24}/>
