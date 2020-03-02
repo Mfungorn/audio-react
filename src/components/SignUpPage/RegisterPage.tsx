@@ -31,7 +31,8 @@ export const RegisterPage = (props: Props) => {
             justify="center"
             style={{
                 minHeight: '100vh',
-                minWidth: '100vh'
+                minWidth: '100vh',
+                backgroundColor: 'lightgray'
             }}
         >
             <Grid item style={{

@@ -11,8 +11,9 @@ export type AuthorListProps = {
 }
 const useStyles = makeStyles((theme: Theme) => createStyles({
     flexContainer: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4,auto)',
+        flexGrow: 1,
+        // display: 'grid',
+        // gridTemplateColumns: 'repeat(4,auto)',
         gridGap: theme.spacing(3),
         justifyContent: 'center',
         paddingLeft: '1%',
@@ -38,7 +39,7 @@ export const AuthorList = (props: AuthorListProps) => {
         <div style={{paddingTop: '3%'}}>
             <Grid container className={classes.flexContainer}>
                 {props.authors.slice(0, visibleAuthorsCount).map(author => (
-                    <Grid item>
+                    <Grid item xs={2}>
                         <AuthorItem
                             key={author.id}
                             author={author}

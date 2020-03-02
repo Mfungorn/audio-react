@@ -55,7 +55,7 @@ export const AuthorPage = () => {
             .catch(error => {
                 console.log('error', error);
             })
-    }, [props, dispatch, fetchAuthor]);
+    }, [props]);
 
     return (
         <div style={{width: '100%', height: '100%'}}>
@@ -71,7 +71,7 @@ export const AuthorPage = () => {
                 </Box>
                 <Box flexGrow={1}>
                     <h4>{state.author.name}</h4>
-                    <h6>item descr</h6>
+                    <h6>{state.author.bio}</h6>
                 </Box>
             </Box>}
             {error && <h4>{error.message}</h4>}
