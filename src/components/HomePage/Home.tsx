@@ -11,13 +11,13 @@ import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import Typography from "@material-ui/core/Typography";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import AuthorList from "../Author/AuthorList";
-import {CircularProgress} from "@material-ui/core";
+import {AuthorList} from "../Author/AuthorList";
+import {CircularProgress, Container} from "@material-ui/core";
 import {Action, Album, AudioContext, Author} from "../../context/AudioContext";
 import config from "../../config";
 import {authHeader} from "../../helpers";
 import useFetch from "use-http/dist";
-import AlbumList from "../Album/AlbumList";
+import {AlbumList} from "../Album/AlbumList";
 import {useHistory} from "react-router";
 
 
@@ -26,7 +26,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         flexGrow: 1,
     },
     listTitle: {
-        paddingLeft: '1%'
+        marginTop: 20,
+        marginLeft: 100,
+        marginBottom: 20
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -182,7 +184,7 @@ export const Home = () => {
     return (
         <>
             {!loading && <div className={classes.grow}>
-                <AppBar position="static">
+                <AppBar position="static" color="default">
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -224,7 +226,7 @@ export const Home = () => {
                 {renderMobileMenu}
                 {renderMenu}
             </div>}
-            <div>
+            <Container>
                 {!loading && <>
                     <h1 className={classes.listTitle}>Authors</h1>
                     <AuthorList authors={state.authors}/>
@@ -236,7 +238,7 @@ export const Home = () => {
                 {loading && <div style={{width: '100%', height: '100%'}}>
                     <CircularProgress size={24}/>
                 </div>}
-            </div>
+            </Container>
         </>
     );
 };

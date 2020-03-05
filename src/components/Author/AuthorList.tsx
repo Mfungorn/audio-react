@@ -1,20 +1,15 @@
 import * as React from 'react';
 import {useCallback, useState} from 'react';
 import {Button, Grid} from "@material-ui/core";
-import AuthorItem from "./AuthorItem";
+import {AuthorItem} from "./AuthorItem";
 import {Author} from "../../context/AudioContext";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {RouteComponentProps, withRouter} from "react-router";
+import {useHistory} from "react-router";
 
 
 export type AuthorListProps = {
     authors: Author[]
 }
-type PathParamsType = {
-    param1: string,
-}
-// Your component own properties
-type PropsType = RouteComponentProps<PathParamsType> & AuthorListProps
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     flexContainer: {
@@ -26,10 +21,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
-const AuthorList = (props: PropsType) => {
+export const AuthorList = (props: AuthorListProps) => {
     console.log('author list items', props);
 
     const classes = useStyles();
+
+    const history = useHistory();
 
     const [visibleAuthorsCount, setVisibleAuthorsCount] = useState<number>(4);
     const expandAuthorsList = useCallback(() => {
@@ -51,17 +48,24 @@ const AuthorList = (props: PropsType) => {
                         />
                     </Grid>
                 ))}
+                <Grid item container style={{
+                    flexDirection: "column",
+                    justifyContent: "bottom"
+                }}>
+                    <Button
+                        style={{
+                            height: 40,
+                            width: '100%'
+                        }}
+                        onClick={expandAuthorsList}>
+                        {visibleAuthorsCount === 4 ? (
+                            <span>Show more</span>
+                        ) : (
+                            <span>Show less</span>
+                        )}
+                    </Button>
+                </Grid>
             </Grid>
-            <Button
-                onClick={expandAuthorsList}>
-                {visibleAuthorsCount === 4 ? (
-                    <span>Show more</span>
-                ) : (
-                    <span>Show less</span>
-                )}
-            </Button>
         </div>
     );
 };
-
-export default withRouter(AuthorList)

@@ -4,17 +4,12 @@ import {Card, CardActionArea, CardContent, CardMedia, createStyles, Grid, Theme,
 import {makeStyles} from "@material-ui/core/styles";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import {Author} from "../../context/AudioContext";
-import {RouteComponentProps, withRouter} from "react-router";
+import {useHistory} from "react-router";
 
 
 export type AuthorItemProps = {
     author: Author
 }
-type PathParamsType = {
-    param1: string,
-}
-// Your component own properties
-type PropsType = RouteComponentProps<PathParamsType> & AuthorItemProps
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,14 +27,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }));
 
-const AuthorItem = (props: PropsType) => {
+export const AuthorItem = (props: AuthorItemProps) => {
     const classes = useStyles();
+
+    const history = useHistory();
 
     const onAuthorClick = useCallback((id: string) => {
         // console.log(id);
         // history.push(`/authors/${id}`)
-        props.history.push(`/authors/${id}`);
-    }, []);
+        history.push(`/authors/${id}`);
+    }, [history]);
 
     return (
         <Card className={classes.root}>
@@ -74,5 +71,3 @@ const AuthorItem = (props: PropsType) => {
         </Card>
     );
 };
-
-export default withRouter(AuthorItem)

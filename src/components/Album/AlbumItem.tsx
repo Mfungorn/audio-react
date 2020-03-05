@@ -13,19 +13,12 @@ import {
 import {makeStyles} from "@material-ui/core/styles";
 import AlbumIcon from '@material-ui/icons/Album';
 import {Album} from "../../context/AudioContext";
-import {RouteComponentProps, withRouter} from "react-router";
+import {useHistory} from "react-router";
 
 
 export type AlbumItemProps = {
     album: Album
 }
-
-type PathParamsType = {
-    param1: string,
-}
-// Your component own properties
-type PropsType = RouteComponentProps<PathParamsType> & AlbumItemProps
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -39,14 +32,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }));
 
-const AlbumItem = (props: PropsType) => {
+export const AlbumItem = (props: AlbumItemProps) => {
     const classes = useStyles();
+
+    const history = useHistory();
 
     const onAlbumClick = useCallback((id: string) => {
         // console.log(id);
         // history.push(`/albums/${id}`)
-        props.history.push(`/albums/${id}`);
-    }, []);
+        history.push(`/albums/${id}`);
+    }, [history]);
 
     return (
         <Card className={classes.root}>
@@ -80,5 +75,3 @@ const AlbumItem = (props: PropsType) => {
         </Card>
     );
 };
-
-export default withRouter(AlbumItem)

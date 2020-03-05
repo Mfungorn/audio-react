@@ -11,29 +11,39 @@ import {Profile} from "./Profile/Profile";
 import {AlbumPage, AlbumPageProps} from "./Album/AlbumPage";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import {NoMatch} from "./NoMatch";
+import {ThemeProvider} from "@material-ui/styles";
+import {createMuiTheme, CssBaseline} from "@material-ui/core";
 
+const theme = createMuiTheme({
+    palette: {
+        type: "dark"
+    }
+});
 
 export const Root = (props) => {
     return (
-        <AudioContextProvider>
-            <ProvideAuth>
-                <Router history={history}>
-                    <Switch>
-                        <Route exact path="/register" component={RegisterPage}/>
-                        <Route exact path="/login" component={LoginPage}/>
-                        {/*<Authorize>*/}
-                        <AuthenticatedRoute path="/user/profile" render={() => <Profile/>}/>
-                        <AuthenticatedRoute path="/" render={() => <Home/>}/>
-                        <AuthenticatedRoute exact path="/authors/:id"
-                                            render={(props: AuthorPageProps) => <AuthorPage id={props.id}/>}/>
-                        <AuthenticatedRoute exact path="/albums/:id"
-                                            render={(props: AlbumPageProps) => <AlbumPage id={props.id}/>}/>
-                        <AuthenticatedRoute path="/notfound" exact render={() => <NoMatch/>}/>
-                        <Redirect to="/notfound"/>
-                        {/*</Authorize>*/}
-                    </Switch>
-                </Router>
-            </ProvideAuth>
-        </AudioContextProvider>
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <AudioContextProvider>
+                <ProvideAuth>
+                    <Router history={history}>
+                        <Switch>
+                            <Route exact path="/register" component={RegisterPage}/>
+                            <Route exact path="/login" component={LoginPage}/>
+                            {/*<Authorize>*/}
+                            <AuthenticatedRoute path="/user/profile" render={() => <Profile/>}/>
+                            <AuthenticatedRoute path="/" render={() => <Home/>}/>
+                            <AuthenticatedRoute path="/authors/:id"
+                                                render={(props: AuthorPageProps) => <AuthorPage id={props.id}/>}/>
+                            <AuthenticatedRoute path="/albums/:id"
+                                                render={(props: AlbumPageProps) => <AlbumPage id={props.id}/>}/>
+                            <AuthenticatedRoute path="/notfound" exact render={() => <NoMatch/>}/>
+                            <Redirect to="/notfound"/>
+                            {/*</Authorize>*/}
+                        </Switch>
+                    </Router>
+                </ProvideAuth>
+            </AudioContextProvider>
+        </ThemeProvider>
     );
 };

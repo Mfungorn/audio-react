@@ -3,20 +3,13 @@ import {useCallback, useState} from 'react';
 import {Button, Grid} from "@material-ui/core";
 import {Album} from "../../context/AudioContext";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import AlbumItem from "./AlbumItem";
-import {RouteComponentProps, withRouter} from "react-router";
+import {AlbumItem} from "./AlbumItem";
+import {useHistory} from "react-router";
 
 
 export type AlbumListProps = {
     albums: Album[]
 }
-
-type PathParamsType = {
-    param1: string,
-}
-// Your component own properties
-type PropsType = RouteComponentProps<PathParamsType> & AlbumListProps
-
 const useStyles = makeStyles((theme: Theme) => createStyles({
     flexContainer: {
         // flexGrow: 1,
@@ -27,10 +20,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
-const AlbumList = (props: PropsType) => {
+export const AlbumList = (props: AlbumListProps) => {
     console.log('album list items', props);
 
     const classes = useStyles();
+
+    const history = useHistory();
 
     const [visibleAlbumsCount, setVisibleAlbumsCount] = useState<number>(4);
     const expandAlbumsList = useCallback(() => {
@@ -52,17 +47,24 @@ const AlbumList = (props: PropsType) => {
                         />
                     </Grid>
                 ))}
+                <Grid item container style={{
+                    flexDirection: "column",
+                    justifyContent: "bottom"
+                }}>
+                    <Button
+                        style={{
+                            height: 40,
+                            width: '100%'
+                        }}
+                        onClick={expandAlbumsList}>
+                        {visibleAlbumsCount === 4 ? (
+                            <span>Show more</span>
+                        ) : (
+                            <span>Show less</span>
+                        )}
+                    </Button>
+                </Grid>
             </Grid>
-            <Button
-                onClick={expandAlbumsList}>
-                {visibleAlbumsCount === 4 ? (
-                    <span>Show more</span>
-                ) : (
-                    <span>Show less</span>
-                )}
-            </Button>
         </div>
     );
 };
-
-export default withRouter(AlbumList)
