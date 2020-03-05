@@ -5,8 +5,11 @@ import {handleResponse} from "../helpers";
 
 
 export type User = {
-    username: string,
-    email: string
+    id: string,
+    name: string,
+    email: string,
+    balance: number,
+    phone: string
 }
 export const TOKEN = 'token';
 export type Token = {
@@ -20,6 +23,7 @@ export const AuthContext = createContext(null);
 // ... available to any child component that calls useAuth().
 export const ProvideAuth = (props) => {
     const [token, setToken] = useState<Token>(null);
+    const [authenticated, setAuthenticated] = useState<Boolean>(false);
 
     let signIn = useCallback((email, password) => {
         const requestOptions = {
@@ -32,6 +36,7 @@ export const ProvideAuth = (props) => {
             .then(handleResponse)
             .then(response => {
                 setToken(response);
+                setAuthenticated(true);
                 return response.accessToken;
             })
             .catch(error => {
@@ -60,14 +65,17 @@ export const ProvideAuth = (props) => {
         if (token) {
             setToken(token);
             localStorage.setItem(TOKEN, JSON.stringify(token));
+            setAuthenticated(true)
         } else {
             setToken(null);
+            setAuthenticated(false);
             localStorage.removeItem(TOKEN);
         }
     }, [token]);
 
     return <AuthContext.Provider
         value={{
+            authenticated,
             token,
             signIn,
             signUp,

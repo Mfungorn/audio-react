@@ -3,23 +3,31 @@ import {useCallback, useState} from 'react';
 import {Button, Grid} from "@material-ui/core";
 import {Album} from "../../context/AudioContext";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {AlbumItem} from "./AlbumItem";
+import AlbumItem from "./AlbumItem";
+import {RouteComponentProps, withRouter} from "react-router";
 
 
 export type AlbumListProps = {
     albums: Album[]
 }
+
+type PathParamsType = {
+    param1: string,
+}
+// Your component own properties
+type PropsType = RouteComponentProps<PathParamsType> & AlbumListProps
+
 const useStyles = makeStyles((theme: Theme) => createStyles({
     flexContainer: {
-        flexGrow: 1,
+        // flexGrow: 1,
+        // display: 'grid',
+        gridTemplateColumns: 'repeat(4,auto)',
         gridGap: theme.spacing(3),
-        justifyContent: 'start',
-        paddingLeft: '1%',
-        paddingRight: '1%'
+        justifyContent: 'center'
     }
 }));
 
-export const AlbumList = (props: AlbumListProps) => {
+const AlbumList = (props: PropsType) => {
     console.log('album list items', props);
 
     const classes = useStyles();
@@ -34,7 +42,7 @@ export const AlbumList = (props: AlbumListProps) => {
     }, [props.albums, visibleAlbumsCount, setVisibleAlbumsCount]);
 
     return (
-        <div style={{paddingTop: '3%'}}>
+        <div>
             <Grid container className={classes.flexContainer}>
                 {props.albums.slice(0, visibleAlbumsCount).map(album => (
                     <Grid item xs={2}>
@@ -46,7 +54,6 @@ export const AlbumList = (props: AlbumListProps) => {
                 ))}
             </Grid>
             <Button
-                style={{float: 'right', marginRight: '13%'}}
                 onClick={expandAlbumsList}>
                 {visibleAlbumsCount === 4 ? (
                     <span>Show more</span>
@@ -57,3 +64,5 @@ export const AlbumList = (props: AlbumListProps) => {
         </div>
     );
 };
+
+export default withRouter(AlbumList)

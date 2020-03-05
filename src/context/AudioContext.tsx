@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {createContext, useReducer} from 'react';
+import {User} from "./AuthContext";
 
 export type Author = {
     id: string,
@@ -7,18 +8,18 @@ export type Author = {
     bio: string,
     logo: string,
     rating: number,
-    genres: Array<Genre> | null,
-    albums: Array<Album> | null,
-    compositions: Array<Track> | null,
+    // genres?: Array<Genre>,
+    // albums?: Array<Album>,
+    // compositions?: Array<Track>
 }
 export type Album = {
     id: string,
     title: string,
     cover: string,
     rating: number,
-    genres: Array<Genre> | null,
-    authors: Array<Author> | null,
-    compositions: Array<Track> | null,
+    authors?: Array<Author>,
+    // genres?: Array<Genre>,
+    // compositions?: Array<Track>,
 }
 export type Track = {
     id: string,
@@ -43,22 +44,27 @@ export enum Action {
     'REQUEST_ALBUM',
     'REQUEST_TRACK',
     'REQUEST_GENRE',
+    'REQUEST_PROFILE',
     'SEARCH',
 }
 
 type AudioContextState = {
-    authors: Array<Author> | null,
-    albums: Array<Album> | null,
-    tracks: Array<Track> | null,
-    genres: Array<Genre> | null
+    authors?: Array<Author>,
+    albums?: Array<Album>,
+    tracks?: Array<Track>,
+    genres?: Array<Genre>
 }
 type PageState = {
-    author: Author | null,
-    album: Album | null,
-    track: Track | null,
+    author?: Author,
+    album?: Album,
+    track?: Track,
 }
 
-export type State = AudioContextState & PageState
+type ProfileState = {
+    profile: User
+}
+
+export type State = AudioContextState & PageState & ProfileState
 
 interface AudioContextAction extends State {
     type: Action
@@ -72,6 +78,7 @@ export type AudioContext = {
     author: Author,
     album: Album,
     track: Track,
+    profile: User
 }
 
 export const AudioContext = createContext(null);
@@ -84,6 +91,7 @@ const initialState: State = {
     author: null,
     album: null,
     track: null,
+    profile: null
 };
 
 const reducer = (state: State, action: AudioContextAction) => {
@@ -100,6 +108,11 @@ const reducer = (state: State, action: AudioContextAction) => {
                 author: action.author,
                 album: action.album,
                 track: action.track,
+            };
+        case Action.REQUEST_PROFILE:
+            return {
+                ...state,
+                profile: action.profile
             };
         case Action.REQUEST_AUTHORS:
             return {
@@ -154,7 +167,6 @@ export const AudioContextProvider = props => {
     //     {data: []},
     //     [],
     // );
-    //
     // console.log('loading', loading);
     // console.log('error', error);
     // console.log('data', data);
@@ -180,9 +192,9 @@ export const AudioContextProvider = props => {
                 state,
                 dispatch,
                 // И тут прокинешь полученные из апи данные
-                // data,
-                // error,
-                // loading
+                // request,
+                // loading,
+                // error
             }}
             {...props}
         />

@@ -11,18 +11,22 @@ import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import Typography from "@material-ui/core/Typography";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import {AuthorList} from "../Author/AuthorList";
+import AuthorList from "../Author/AuthorList";
 import {CircularProgress} from "@material-ui/core";
 import {Action, Album, AudioContext, Author} from "../../context/AudioContext";
 import config from "../../config";
 import {authHeader} from "../../helpers";
 import useFetch from "use-http/dist";
-import {AlbumList} from "../Album/AlbumList";
+import AlbumList from "../Album/AlbumList";
+import {useHistory} from "react-router";
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     grow: {
         flexGrow: 1,
+    },
+    listTitle: {
+        paddingLeft: '1%'
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -47,8 +51,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
 }),);
 
-export const Home = props => {
+export const Home = () => {
     const classes = useStyles();
+    const history = useHistory();
 
     // Get auth state and re-render anytime it changes
     const {signOut} = useAuth();
@@ -67,7 +72,7 @@ export const Home = props => {
 
     const {
         request, loading, error
-    } = useFetch<Array<Author>>(`${config.apiUrl}`, options);
+    } = useFetch(`${config.apiUrl}`, options);
 
     useEffect(() => {
         async function fetchAuthors(): Promise<Author[]> {
@@ -124,6 +129,11 @@ export const Home = props => {
         handleMobileMenuClose();
     };
 
+    const openProfile = () => {
+        history.push('/user/profile');
+        handleMenuClose()
+    };
+
     const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
@@ -139,7 +149,7 @@ export const Home = props => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            <MenuItem onClick={openProfile}>Profile</MenuItem>
             <MenuItem onClick={signOut}>Logout</MenuItem>
         </Menu>
     );
@@ -216,18 +226,16 @@ export const Home = props => {
             </div>}
             <div>
                 {!loading && <>
-                    <h1>Authors</h1>
+                    <h1 className={classes.listTitle}>Authors</h1>
                     <AuthorList authors={state.authors}/>
                 </>}
                 {!loading && <>
-                    <h1>Albums</h1>
+                    <h1 className={classes.listTitle}>Albums</h1>
                     <AlbumList albums={state.albums}/>
                 </>}
-                {loading &&
-                <div style={{width: '100%', height: '100%'}}>
+                {loading && <div style={{width: '100%', height: '100%'}}>
                     <CircularProgress size={24}/>
                 </div>}
-                {error && <h4>{error.message}</h4>}
             </div>
         </>
     );

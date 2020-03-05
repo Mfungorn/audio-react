@@ -4,13 +4,18 @@ import {Card, CardActionArea, CardContent, CardMedia, createStyles, Grid, Theme,
 import {makeStyles} from "@material-ui/core/styles";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import {Author} from "../../context/AudioContext";
-import {useHistory} from "react-router";
-import {NavLink} from "react-router-dom";
+import {RouteComponentProps, withRouter} from "react-router";
 
 
 export type AuthorItemProps = {
     author: Author
 }
+type PathParamsType = {
+    param1: string,
+}
+// Your component own properties
+type PropsType = RouteComponentProps<PathParamsType> & AuthorItemProps
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -27,14 +32,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }));
 
-export const AuthorItem = (props: AuthorItemProps) => {
+const AuthorItem = (props: PropsType) => {
     const classes = useStyles();
 
-    let history = useHistory();
     const onAuthorClick = useCallback((id: string) => {
         // console.log(id);
-        // history.push(`/${id}`)
-    }, [history]);
+        // history.push(`/authors/${id}`)
+        props.history.push(`/authors/${id}`);
+    }, []);
 
     return (
         <Card className={classes.root}>
@@ -42,14 +47,13 @@ export const AuthorItem = (props: AuthorItemProps) => {
                 style={{
                     paddingTop: 8
                 }}
-                onClick={e => onAuthorClick(props.author.id)}>
-                <NavLink to={`/authors/${props.author.id}`}>
-                    <CardMedia
-                        component="img"
-                        className={classes.cardMedia}
-                        image={props.author.logo}
-                    />
-                </NavLink>
+                onClick={e => onAuthorClick(props.author.id)}
+            >
+                <CardMedia
+                    component="img"
+                    className={classes.cardMedia}
+                    image={props.author.logo}
+                />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2" style={{textAlign: 'center'}}>
                         {props.author.name}
@@ -70,3 +74,5 @@ export const AuthorItem = (props: AuthorItemProps) => {
         </Card>
     );
 };
+
+export default withRouter(AuthorItem)

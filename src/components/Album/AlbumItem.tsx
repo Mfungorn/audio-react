@@ -13,13 +13,19 @@ import {
 import {makeStyles} from "@material-ui/core/styles";
 import AlbumIcon from '@material-ui/icons/Album';
 import {Album} from "../../context/AudioContext";
-import {useHistory} from "react-router";
-import {NavLink} from "react-router-dom";
+import {RouteComponentProps, withRouter} from "react-router";
 
 
 export type AlbumItemProps = {
     album: Album
 }
+
+type PathParamsType = {
+    param1: string,
+}
+// Your component own properties
+type PropsType = RouteComponentProps<PathParamsType> & AlbumItemProps
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -33,42 +39,46 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }));
 
-export const AlbumItem = (props: AlbumItemProps) => {
+const AlbumItem = (props: PropsType) => {
     const classes = useStyles();
 
-    let history = useHistory();
-    const onAuthorClick = useCallback((id: string) => {
+    const onAlbumClick = useCallback((id: string) => {
         // console.log(id);
-        // history.push(`/${id}`)
-    }, [history]);
+        // history.push(`/albums/${id}`)
+        props.history.push(`/albums/${id}`);
+    }, []);
 
     return (
         <Card className={classes.root}>
             <CardActionArea
-                onClick={e => onAuthorClick(props.album.id)}>
-                <NavLink to={`/albums/${props.album.id}`}>
-                    {props.album.cover ? <CardMedia
-                        component="img"
-                        className={classes.cardMedia}
-                        image={props.album.cover}
-                    /> : <AlbumIcon style={{
-                        fontSize: 200,
-                        textAlign: 'center',
-                        margin: '0 auto',
-                    }}/>}
-                </NavLink>
+                onClick={e => onAlbumClick(props.album.id)}
+            >
+                {props.album.cover ? <CardMedia
+                    component="img"
+                    className={classes.cardMedia}
+                    image={props.album.cover}
+                /> : <AlbumIcon style={{
+                    fontSize: 200,
+                    textAlign: 'center',
+                    margin: '0 auto',
+                }}/>}
                 <CardContent>
                     <Typography gutterBottom variant="h6" component="h6" style={{textAlign: 'start'}}>
                         {props.album.title}
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Typography gutterBottom variant="body2" component="h6" style={{textAlign: 'end'}}>
-                        {/*TODO*/}
-                        {props.album.genres.pop()}
+                    <Typography gutterBottom variant="body2" component="h6" style={{textAlign: 'start'}}>
+                        {props.album.authors
+                        && props.album.authors[0]
+                            ? props.album.authors[0].name
+                            : "No author info provided"
+                        }
                     </Typography>
                 </CardActions>
             </CardActionArea>
         </Card>
     );
 };
+
+export default withRouter(AlbumItem)
