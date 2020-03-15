@@ -1,10 +1,8 @@
 import * as React from 'react';
-import {useContext, useLayoutEffect} from 'react';
+import {useLayoutEffect, useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, CircularProgress, createStyles, Theme} from "@material-ui/core";
-import {Action, AudioContext} from "../../context/AudioContext";
-import {User} from "../../context/AuthContext";
-import {authHeader} from "../../helpers";
+import {useAuth, User} from "../../context/AuthContext";
 import useFetch from "use-http/dist";
 import config from "../../config";
 
@@ -22,15 +20,18 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Profile = () => {
     const classes = useStyles();
 
-    const {
-        state, dispatch
-    } = useContext(AudioContext);
+    // const {
+    //     state, dispatch
+    // } = useContext(AudioContext);
+
+    const {token} = useAuth();
+    const [user, setUser] = useState<User>();
 
     const options = {
         timeout: 15000,
         retries: 1,
         headers: {
-            Authorization: authHeader().Authorization
+            Authorization: `${token.tokenType} ${token.accessToken}`
         }
     };
 
@@ -43,10 +44,7 @@ export const Profile = () => {
             return await request.get();
         })().then(value => {
             console.log("profile", value);
-            dispatch({
-                type: Action.REQUEST_PROFILE,
-                profile: value
-            })
+            setUser(value)
         }).catch(error => {
             console.log('error', error);
         })
@@ -65,8 +63,8 @@ export const Profile = () => {
                     Profile
                 </Box>
                 <Box flexGrow={1}>
-                    <h4>{state.profile ? state.profile.name : "No name"}</h4>
-                    <h6>{state.profile ? state.profile.email : "No email"}</h6>
+                    <h4>{user ? user.name : "No name"}</h4>
+                    <h6>{user ? user.email : "No email"}</h6>
                 </Box>
             </Box>}
         </div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {createContext, useCallback, useContext, useEffect, useState} from 'react';
+import {createContext, useContext, useEffect, useState} from 'react';
 import config from "../config/config";
 import {handleResponse} from "../helpers";
 
@@ -25,7 +25,7 @@ export const ProvideAuth = (props) => {
     const [token, setToken] = useState<Token>(null);
     const [authenticated, setAuthenticated] = useState<Boolean>(false);
 
-    let signIn = useCallback((email, password) => {
+    const signIn = (email, password) => {
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -36,15 +36,16 @@ export const ProvideAuth = (props) => {
             .then(handleResponse)
             .then(response => {
                 setToken(response);
+                localStorage.setItem(TOKEN, JSON.stringify(response));
                 setAuthenticated(true);
                 return response.accessToken;
             })
             .catch(error => {
                 console.log('sign in error', error)
             });
-    }, []);
+    };
 
-    let signUp = useCallback((name, email, password) => {
+    const signUp = (name, email, password) => {
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -52,26 +53,21 @@ export const ProvideAuth = (props) => {
         };
 
         return fetch(`${config.apiUrl}/auth/register/customer`, requestOptions)
-    }, []);
+    };
 
-
-    const signOut = useCallback(() => {
+    const signOut = () => {
         setToken(null);
-    }, []);
-
+        setAuthenticated(false);
+        localStorage.removeItem(TOKEN);
+    };
 
     useEffect(() => {
         console.log('auth token', token);
         if (token) {
-            setToken(token);
-            localStorage.setItem(TOKEN, JSON.stringify(token));
-            setAuthenticated(true)
         } else {
-            setToken(null);
-            setAuthenticated(false);
-            localStorage.removeItem(TOKEN);
+            signOut()
         }
-    }, [token]);
+    }, []);
 
     return <AuthContext.Provider
         value={{

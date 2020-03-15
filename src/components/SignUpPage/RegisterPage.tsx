@@ -3,22 +3,14 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import {RouteComponentProps, useHistory} from "react-router";
+import {useHistory} from "react-router";
 import {CircularProgress, Grid, Typography} from "@material-ui/core";
 import {ThemedButton} from "../ThemedButton";
 import {useAuth} from "../../context/AuthContext";
 
 
-interface RouterProps {
-    title: string;   // This one is coming from the router
-}
-
-interface Props extends RouteComponentProps<RouterProps> {
-    // Add your regular properties here
-}
-
-export const RegisterPage = (props: Props) => {
-    let history = useHistory();
+export const RegisterPage = () => {
+    const history = useHistory();
 
     const {signUp} = useAuth();
 

@@ -1,15 +1,15 @@
 import * as React from 'react';
 import {useCallback, useState} from 'react';
 import {Button, Grid} from "@material-ui/core";
-import {Album} from "../../context/AudioContext";
+import {AuthorItem} from "./AuthorItem";
+import {Author} from "../../context/AudioContext";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {AlbumItem} from "./AlbumItem";
-import {useHistory} from "react-router";
 
 
-export type AlbumListProps = {
-    albums: Album[]
+export type AuthorListProps = {
+    authors: Author[]
 }
+
 const useStyles = makeStyles((theme: Theme) => createStyles({
     flexContainer: {
         // flexGrow: 1,
@@ -20,30 +20,28 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
-export const AlbumList = (props: AlbumListProps) => {
-    console.log('album list items', props);
+export const AuthorList = (props: AuthorListProps) => {
+    console.log('author list items', props.authors);
 
     const classes = useStyles();
 
-    const history = useHistory();
-
-    const [visibleAlbumsCount, setVisibleAlbumsCount] = useState<number>(4);
-    const expandAlbumsList = useCallback(() => {
-        visibleAlbumsCount === 4 ? (
-            setVisibleAlbumsCount(props.albums.length)
+    const [visibleAuthorsCount, setVisibleAuthorsCount] = useState<number>(4);
+    const expandAuthorsList = useCallback(() => {
+        visibleAuthorsCount === 4 ? (
+            setVisibleAuthorsCount(props.authors.length)
         ) : (
-            setVisibleAlbumsCount(4)
+            setVisibleAuthorsCount(4)
         )
-    }, [props.albums, visibleAlbumsCount, setVisibleAlbumsCount]);
+    }, [props.authors, visibleAuthorsCount, setVisibleAuthorsCount]);
 
     return (
         <div>
             <Grid container className={classes.flexContainer}>
-                {props.albums.slice(0, visibleAlbumsCount).map(album => (
+                {props.authors.slice(0, visibleAuthorsCount).map(author => (
                     <Grid item xs={2}>
-                        <AlbumItem
-                            key={album.id}
-                            album={album}
+                        <AuthorItem
+                            key={author.id}
+                            author={author}
                         />
                     </Grid>
                 ))}
@@ -56,8 +54,8 @@ export const AlbumList = (props: AlbumListProps) => {
                             height: 40,
                             width: '100%'
                         }}
-                        onClick={expandAlbumsList}>
-                        {visibleAlbumsCount === 4 ? (
+                        onClick={expandAuthorsList}>
+                        {visibleAuthorsCount === 4 ? (
                             <span>Show more</span>
                         ) : (
                             <span>Show less</span>

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {useCallback} from 'react';
 import {Card, CardActionArea, CardContent, CardMedia, createStyles, Grid, Theme, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -29,14 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const AuthorItem = (props: AuthorItemProps) => {
     const classes = useStyles();
-
     const history = useHistory();
 
-    const onAuthorClick = useCallback((id: string) => {
-        // console.log(id);
-        // history.push(`/authors/${id}`)
+    const onAuthorClick = (id: string) => {
+        console.log("author item", id);
         history.push(`/authors/${id}`);
-    }, [history]);
+    };
 
     return (
         <Card className={classes.root}>

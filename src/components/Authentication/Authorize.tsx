@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {useAuth} from "../context/AuthContext";
+import {useAuth} from "../../context/AuthContext";
 import {useHistory} from "react-router";
 
 export const Authorize = props => {

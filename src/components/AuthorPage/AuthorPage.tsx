@@ -1,54 +1,53 @@
 import * as React from 'react';
-import {useContext, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import {Box, CircularProgress, createStyles, Theme} from "@material-ui/core";
-import {Action, Album, AudioContext} from "../../context/AudioContext";
-import {authHeader} from "../../helpers";
+import {Author} from "../../context/AudioContext";
 import useFetch from "use-http/dist";
 import config from "../../config";
+import {useAuth} from "../../context/AuthContext";
 
 
-export interface AlbumPageProps {
+export interface AuthorPageProps {
     id: string
 }
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({}));
 
-export const AlbumPage = (props: AlbumPageProps) => {
+export const AuthorPage = (props: AuthorPageProps) => {
     const classes = useStyles();
-    // let props = useParams<AlbumPageProps>();
+    console.log("author page");
 
-    const {
-        state, dispatch
-    } = useContext(AudioContext);
+    // const {
+    //     state, dispatch
+    // } = useContext(AudioContext);
+
+    const {token} = useAuth();
+    const [author, setAuthor] = useState<Author>();
 
     const options = {
         timeout: 15000,
         retries: 1,
         headers: {
-            Authorization: authHeader().Authorization
+            Authorization: `${token.tokenType} ${token.accessToken}`
         }
     };
 
     const {
         request, loading, error
-    } = useFetch(`${config.apiUrl}/albums`, options);
+    } = useFetch(`${config.apiUrl}/authors`, options);
 
     useEffect(() => {
-        (async function fetchAlbum(id: string): Promise<Album> {
-            return await request.get(`/${id}`);
-        })(props.id).then(value => {
-            console.log('album props', props);
-            console.log('album page', value);
-            dispatch({
-                type: Action.REQUEST_ALBUM,
-                album: value
+        (async (id: string): Promise<Author> => await request.get(`/${id}`))(props.id)
+            .then(value => {
+                console.log('author page author', value);
+                setAuthor(value)
             })
-        }).catch(error => {
-            console.log('error', error);
-        })
-    }, []);
+            .catch(error => {
+                console.log('error', error);
+            })
+    });
 
     return (
         <div style={{width: '100%', height: '100%'}}>
@@ -60,11 +59,11 @@ export const AlbumPage = (props: AlbumPageProps) => {
             }} size={24}/>}
             {!loading && <Box display="flex" justifyContent="flex-start" m={1} p={1} bgcolor="background.paper">
                 <Box p={1} bgcolor="grey.300">
-                    Album
+                    Author
                 </Box>
                 <Box flexGrow={1}>
-                    <h4>{state.album ? state.album.title : "No title"}</h4>
-                    <h6>{state.album ? state.album.rating : "No rating"}</h6>
+                    <h4>{author ? author.name : "No name"}</h4>
+                    <h6>{author ? author.bio : "No bio"}</h6>
                 </Box>
             </Box>}
             {error && <h4>{error.message}</h4>}

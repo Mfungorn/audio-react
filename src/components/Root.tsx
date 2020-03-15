@@ -6,11 +6,11 @@ import {RegisterPage} from "./SignUpPage/RegisterPage";
 import {LoginPage} from "./LoginPage/LoginPage";
 import {ProvideAuth} from "../context/AuthContext";
 import {Home} from "./HomePage/Home";
-import {AuthorPage, AuthorPageProps} from "./Author/AuthorPage";
+import {AuthorPage, AuthorPageProps} from "./AuthorPage/AuthorPage";
 import {Profile} from "./Profile/Profile";
-import {AlbumPage, AlbumPageProps} from "./Album/AlbumPage";
-import AuthenticatedRoute from "./AuthenticatedRoute";
-import {NoMatch} from "./NoMatch";
+import {AlbumPage, AlbumPageProps} from "./AlbumPage/AlbumPage";
+import AuthenticatedRoute from "./Authentication/AuthenticatedRoute";
+import {NoMatch} from "./NoMatch/NoMatch";
 import {ThemeProvider} from "@material-ui/styles";
 import {createMuiTheme, CssBaseline} from "@material-ui/core";
 

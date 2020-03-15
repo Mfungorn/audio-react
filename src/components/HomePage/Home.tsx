@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useAuth} from "../../context/AuthContext";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
@@ -11,15 +11,19 @@ import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import Typography from "@material-ui/core/Typography";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import {AuthorList} from "../Author/AuthorList";
+import {AuthorList} from "../AuthorList/AuthorList";
 import {CircularProgress, Container} from "@material-ui/core";
-import {Action, Album, AudioContext, Author} from "../../context/AudioContext";
+import {Album, Author} from "../../context/AudioContext";
 import config from "../../config";
-import {authHeader} from "../../helpers";
 import useFetch from "use-http/dist";
-import {AlbumList} from "../Album/AlbumList";
+import {AlbumList} from "../AlbumList/AlbumList";
 import {useHistory} from "react-router";
 
+
+interface HomeState {
+    authors: Author[],
+    albums: Album[]
+}
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     grow: {
@@ -27,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     listTitle: {
         marginTop: 20,
-        marginLeft: 100,
+        marginLeft: 80,
         marginBottom: 20
     },
     menuButton: {
@@ -58,17 +62,20 @@ export const Home = () => {
     const history = useHistory();
 
     // Get auth state and re-render anytime it changes
-    const {signOut} = useAuth();
+    const {signOut, token} = useAuth();
 
-    const {
-        state, dispatch
-    } = useContext(AudioContext);
+    // const {
+    //     state, dispatch
+    // } = useContext(AudioContext);
+
+    const [authors, setAuthors] = useState<Author[]>([]);
+    const [albums, setAlbums] = useState<Album[]>([]);
 
     const options = {
         timeout: 15000,
         retries: 1,
         headers: {
-            Authorization: authHeader().Authorization
+            Authorization: `${token.tokenType} ${token.accessToken}`
         }
     };
 
@@ -77,39 +84,23 @@ export const Home = () => {
     } = useFetch(`${config.apiUrl}`, options);
 
     useEffect(() => {
-        async function fetchAuthors(): Promise<Author[]> {
-            return await request.get("/authors/all")
-        }
-
-        fetchAuthors()
+        (async (): Promise<Author[]> => await request.get("/authors/all"))()
             .then(value => {
                 console.log('home authors', value);
-                dispatch({
-                    type: Action.REQUEST_AUTHORS,
-                    authors: value,
-                })
+                setAuthors(value)
             })
             .catch(error => {
                 console.log('error', error);
-            })
-    }, []);
+            });
 
-    useEffect(() => {
-        async function fetchAlbums(): Promise<Album[]> {
-            return await request.get("/albums/all")
-        }
-
-        fetchAlbums()
+        (async (): Promise<Album[]> => await request.get("/albums/all"))()
             .then(value => {
                 console.log('home albums', value);
-                dispatch({
-                    type: Action.REQUEST_ALBUMS,
-                    albums: value,
-                })
+                setAlbums(value)
             })
             .catch(error => {
                 console.log('error', error);
-            })
+            });
     }, []);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -229,11 +220,11 @@ export const Home = () => {
             <Container>
                 {!loading && <>
                     <h1 className={classes.listTitle}>Authors</h1>
-                    <AuthorList authors={state.authors}/>
+                    <AuthorList authors={authors}/>
                 </>}
                 {!loading && <>
                     <h1 className={classes.listTitle}>Albums</h1>
-                    <AlbumList albums={state.albums}/>
+                    <AlbumList albums={albums}/>
                 </>}
                 {loading && <div style={{width: '100%', height: '100%'}}>
                     <CircularProgress size={24}/>

@@ -1,35 +1,18 @@
 import * as React from 'react';
-import {useCallback, useEffect} from 'react';
+import {useEffect} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import {RouteComponentProps, useHistory, useLocation} from "react-router";
+import {useHistory, useLocation} from "react-router";
 import {ThemedButton} from "../ThemedButton";
 import {Button, CircularProgress, Grid} from "@material-ui/core";
 import {useAuth} from "../../context/AuthContext";
 
 
-interface RouterProps {
-    title: string;   // This one is coming from the router
-}
-
-interface Props extends RouteComponentProps<RouterProps> {
-    // Add your regular properties here
-}
-
-export const LoginPage = (props: Props) => {
-    // const {
-    //     state,
-    //     dispatch,
-    //     currentUser,
-    //     loading,
-    //     error,
-    //     data,
-    // } = useContext(AudioContext);
-
-    const {token, signIn} = useAuth();
+export const LoginPage = () => {
+    const {token, signIn, authenticated} = useAuth();
     console.log('sign in', signIn);
 
     let history = useHistory();
@@ -37,20 +20,20 @@ export const LoginPage = (props: Props) => {
 
     // check if already authenticate
     useEffect(() => {
-        if (token) {
+        if (authenticated) {
             const {from}: any = location.state || {from: {pathname: "/"}};
             history.push(from);
         }
-    }, [token]);
+    });
 
-    const onSignUpButtonClicked = useCallback((e) => {
+    const onSignUpButtonClicked = (e) => {
         history.push("/register")
-    }, [history]);
+    };
 
-    const onLoginSubmit = useCallback(() => {
+    const onLoginSubmit = () => {
         const {from}: any = location.state || {from: {pathname: "/"}};
         history.push(from);
-    }, [history, location]);
+    };
 
     return (
         <Grid

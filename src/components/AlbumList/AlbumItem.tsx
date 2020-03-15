@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {useCallback} from 'react';
 import {
     Card,
     CardActionArea,
@@ -37,11 +36,9 @@ export const AlbumItem = (props: AlbumItemProps) => {
 
     const history = useHistory();
 
-    const onAlbumClick = useCallback((id: string) => {
-        // console.log(id);
-        // history.push(`/albums/${id}`)
+    const onAlbumClick = (id: string) => {
         history.push(`/albums/${id}`);
-    }, [history]);
+    };
 
     return (
         <Card className={classes.root}>
