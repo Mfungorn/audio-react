@@ -4,6 +4,7 @@ import {Redirect, Route, useHistory} from 'react-router-dom';
 import {useAuth} from "../../context/AuthContext";
 
 
+// @ts-ignore
 export default ({render, ...routeProps}) => {
     const {authenticated} = useAuth();
     const [isAuthenticated] = useState(authenticated);

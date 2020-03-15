@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import {useAuth} from "../../context/AuthContext";
 import {useHistory} from "react-router";
 
+// @ts-ignore
 export const Authorize = props => {
     const [isAuthorized, setAuthorized] = useState(false);
     const {token} = useAuth();

@@ -31,7 +31,7 @@ export const Profile = () => {
         timeout: 15000,
         retries: 1,
         headers: {
-            Authorization: `${token.tokenType} ${token.accessToken}`
+            Authorization: `${token?.tokenType} ${token?.accessToken}`
         }
     };
 

@@ -1,6 +1,5 @@
 import {AudioContextProvider} from "../context/AudioContext";
-import {Redirect, Route, Router, Switch} from "react-router-dom";
-import {history} from "../helpers";
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import * as React from "react";
 import {RegisterPage} from "./SignUpPage/RegisterPage";
 import {LoginPage} from "./LoginPage/LoginPage";
@@ -20,13 +19,13 @@ const theme = createMuiTheme({
     }
 });
 
-export const Root = (props) => {
+export const Root = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <AudioContextProvider>
                 <ProvideAuth>
-                    <Router history={history}>
+                    <BrowserRouter>
                         <Switch>
                             <Route exact path="/register" component={RegisterPage}/>
                             <Route exact path="/login" component={LoginPage}/>
@@ -41,7 +40,7 @@ export const Root = (props) => {
                             <Redirect to="/notfound"/>
                             {/*</Authorize>*/}
                         </Switch>
-                    </Router>
+                    </BrowserRouter>
                 </ProvideAuth>
             </AudioContextProvider>
         </ThemeProvider>

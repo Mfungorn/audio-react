@@ -26,7 +26,7 @@ export const LoginPage = () => {
         }
     });
 
-    const onSignUpButtonClicked = (e) => {
+    const onSignUpButtonClicked = (event: any) => {
         history.push("/register")
     };
 
@@ -66,6 +66,7 @@ export const LoginPage = () => {
                             onSubmit={
                                 ({email, password}, {setStatus, setSubmitting}) => {
                                     setStatus();
+                                    // @ts-ignore
                                     signIn(email, password)
                                         .then(
                                             token => {

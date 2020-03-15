@@ -1,6 +1,6 @@
 import {TOKEN} from "../context/AuthContext";
 
-export const handleResponse = async response => {
+export const handleResponse = async (response: Response) => {
     let text = await response.text();
     const data = text && JSON.parse(text);
     if (response.ok) {

@@ -61,7 +61,7 @@ type PageState = {
 }
 
 type ProfileState = {
-    profile: User
+    profile?: User
 }
 
 export type State = AudioContextState & PageState & ProfileState
@@ -88,10 +88,10 @@ const initialState: State = {
     albums: Array<Album>(),
     tracks: Array<Track>(),
     genres: Array<Genre>(),
-    author: null,
-    album: null,
-    track: null,
-    profile: null
+    author: undefined,
+    album: undefined,
+    track: undefined,
+    profile: undefined
 };
 
 const reducer = (state: State, action: AudioContextAction) => {
@@ -158,7 +158,7 @@ const reducer = (state: State, action: AudioContextAction) => {
     }
 };
 
-export const AudioContextProvider = props => {
+export const AudioContextProvider = (props: any) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // Тут получишь данные из апи

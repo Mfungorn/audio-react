@@ -46,6 +46,7 @@ export const RegisterPage = () => {
                             onSubmit={
                                 ({username, email, password}, {setStatus, setSubmitting}) => {
                                     setStatus();
+                                    // @ts-ignore
                                     signUp(username, email, password)
                                         .then(
                                             user => {

@@ -16,16 +16,26 @@ export type Token = {
     accessToken: string,
     tokenType: string
 }
+interface AuthState {
+    authenticated: boolean,
+    token: Token | null,
+    signIn?: (email: string, password: string) => Promise<Response>,
+    signUp?: (username: string, email: string, password: string) => Promise<Response>,
+    signOut?: () => void
+}
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext<AuthState>({
+    authenticated: false,
+    token: {tokenType: '', accessToken: ''}
+});
 
 // Provider component that wraps your app and makes auth object ...
 // ... available to any child component that calls useAuth().
-export const ProvideAuth = (props) => {
-    const [token, setToken] = useState<Token>(null);
+export const ProvideAuth = (props: any) => {
+    const [token, setToken] = useState<Token>();
     const [authenticated, setAuthenticated] = useState<Boolean>(false);
 
-    const signIn = (email, password) => {
+    const signIn = (email: string, password: string) => {
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -45,7 +55,7 @@ export const ProvideAuth = (props) => {
             });
     };
 
-    const signUp = (name, email, password) => {
+    const signUp = (name: string, email: string, password: string) => {
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -56,7 +66,7 @@ export const ProvideAuth = (props) => {
     };
 
     const signOut = () => {
-        setToken(null);
+        setToken(undefined);
         setAuthenticated(false);
         localStorage.removeItem(TOKEN);
     };
