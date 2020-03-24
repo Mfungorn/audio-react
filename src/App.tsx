@@ -4,16 +4,17 @@ import {BrowserRouter, Switch} from "react-router-dom";
 import { Route } from "react-router";
 import { Routes } from "./Routes";
 import HomePage from "./components/HomePage";
-import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
+import {createMuiTheme, CssBaseline, MuiThemeProvider} from "@material-ui/core";
 import MainLayout from "./components/MainLayout";
 import {LoginPage} from "./components/Login/LoginPage";
 import {toast, ToastContainer} from "react-toastify";
-import {FakeApi} from "./api/auth/FakeApi";
 import 'react-toastify/dist/ReactToastify.css';
 import Authorize from "./components/Authorization/Authorize";
-import {AuthContext} from "./components/Authorization/AuthContext";
+import {ApiContext} from "./components/Authorization/ApiContext";
 import {RegisterPage} from "./components/Register/RegisterPage";
-import authApi from "./api/auth/AuthApi";
+import api from "./api/auth/Api";
+import {AuthorPage} from "./components/Authors/AuthorPage";
+import {AlbumPage} from "./components/Albums/AlbumPage";
 
 
 const theme = createMuiTheme({
@@ -25,7 +26,8 @@ const theme = createMuiTheme({
 function App() {
   return (
       <MuiThemeProvider theme={theme}>
-        <AuthContext.Provider value={authApi}>
+        <CssBaseline/>
+        <ApiContext.Provider value={api}>
           <ToastContainer position={toast.POSITION.TOP_RIGHT} />
           <BrowserRouter>
             <Switch>
@@ -34,11 +36,13 @@ function App() {
               <Authorize>
                 <MainLayout>
                   <Route exact path={Routes.home} component={HomePage} />
+                  <Route path={Routes.author} component={AuthorPage} />
+                  <Route path={Routes.album} component={AlbumPage} />
                 </MainLayout>
               </Authorize>
             </Switch>
           </BrowserRouter>
-        </AuthContext.Provider>
+        </ApiContext.Provider>
       </MuiThemeProvider>
   );
 }

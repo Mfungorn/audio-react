@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import {useHistory} from "react-router";
 import {ThemedButton} from "../ThemedButton";
 import {Button, CircularProgress, Grid} from "@material-ui/core";
-import {useAuth} from "../Authorization/AuthContext";
+import {useApi} from "../Authorization/ApiContext";
 import {Redirect} from "react-router-dom";
 import {Routes} from "../../Routes";
 import {useReducer} from "react";
@@ -44,7 +44,7 @@ const initialState = {
 } as IState;
 
 export const LoginPage = () => {
-    const auth = useAuth();
+    const auth = useApi();
     initialState.loggedIn = auth.userSession != null;
     const [state, dispatch] = useReducer(reducer, initialState);
 

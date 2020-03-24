@@ -6,12 +6,12 @@ import CardContent from '@material-ui/core/CardContent';
 import {useHistory} from "react-router";
 import {CircularProgress, Grid, Typography} from "@material-ui/core";
 import {ThemedButton} from "../ThemedButton";
-import {useAuth} from "../Authorization/AuthContext";
+import {useApi} from "../Authorization/ApiContext";
 
 
 export const RegisterPage = () => {
     const history = useHistory();
-    const auth = useAuth();
+    const auth = useApi();
 
     return (
         <Grid

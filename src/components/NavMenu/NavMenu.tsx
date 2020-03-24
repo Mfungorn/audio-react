@@ -2,7 +2,7 @@ import React from "react";
 import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import {makeStyles} from "@material-ui/core/styles";
-import {useAuth} from "../Authorization/AuthContext";
+import {useApi} from "../Authorization/ApiContext";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 
 const NavMenu = () => {
     const classes = useStyles();
-    const auth = useAuth();
+    const auth = useApi();
     const userSession = auth.userSession;
 
     const loginLogoutSection = () => {
