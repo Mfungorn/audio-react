@@ -1,4 +1,3 @@
-import React from "react";
 import axiosGlobal, {AxiosResponse} from "axios";
 import jwt_decode from "jwt-decode";
 import {Author} from "../../domain/models/Author";
@@ -157,7 +156,7 @@ class Api implements IApi {
     }
 
     fetchAuthorTracks(id: number): Promise<AxiosResponse<Track[]>> {
-        return axios.get<Track[]>(`${backendUrl}/authors/${id}/compositiions`)
+        return axios.get<Track[]>(`${backendUrl}/authors/${id}/compositions`)
     }
 
     fetchAuthorGenres(id: number): Promise<AxiosResponse<Genre[]>> {

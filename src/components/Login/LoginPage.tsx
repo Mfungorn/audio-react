@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useReducer} from 'react';
 import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import Card from '@material-ui/core/Card';
@@ -10,7 +11,6 @@ import {Button, CircularProgress, Grid} from "@material-ui/core";
 import {useApi} from "../Authorization/ApiContext";
 import {Redirect} from "react-router-dom";
 import {Routes} from "../../Routes";
-import {useReducer} from "react";
 import {toast} from "react-toastify";
 import "./LoginPage.css";
 
@@ -141,7 +141,7 @@ export const LoginPage = () => {
                                                             Login
                                                         </ThemedButton>
                                                     )}
-                                                <Button onClick={onSignUpButtonClicked}>
+                                                <Button onClick={onSignUpButtonClicked} style={{marginTop: 16}}>
                                                     <span>Haven't an account yet?</span>
                                                 </Button>
                                             </div>
