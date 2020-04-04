@@ -5,48 +5,14 @@ import {Author} from "../domain/models/Author";
 import {Album} from "../domain/models/Album";
 import {useApi} from "./Authorization/ApiContext";
 import {AxiosResponse} from "axios";
-import {useHistory} from "react-router-dom";
 import {AuthorList} from "./Authors/AuthorList/AuthorList";
 import {AlbumList} from "./Albums/AlbumList/AlbumList";
 import {toast} from "react-toastify";
 
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    grow: {
-        flexGrow: 1,
-    },
-    listTitle: {
-        marginTop: 20,
-        marginLeft: 80,
-        marginBottom: 20
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-            display: 'block',
-        },
-    },
-    sectionDesktop: {
-        display: 'none',
-        [theme.breakpoints.up('md')]: {
-            display: 'flex',
-        },
-    },
-    sectionMobile: {
-        display: 'flex',
-        [theme.breakpoints.up('md')]: {
-            display: 'none',
-        },
-    },
-}));
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 const HomePage = () => {
-    const classes = useStyles();
-    const history = useHistory();
-
     const api = useApi();
 
     const [authors, setAuthors] = useState<Author[]>([]);

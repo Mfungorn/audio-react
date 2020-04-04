@@ -63,15 +63,11 @@ export const AlbumItem = (props: AlbumItemProps) => {
                     <Typography gutterBottom variant="h6" component="h6" style={{textAlign: 'start'}}>
                         {props.album.title}
                     </Typography>
+                    <Typography gutterBottom variant="body2" component="h6" style={{textAlign: 'start'}}>
+                        {props.album.authorName} • {props.album.year}
+                    </Typography>
                 </CardContent>
                 <CardActions>
-                    <Typography gutterBottom variant="body2" component="h6" style={{textAlign: 'start'}}>
-                        {props.album.authors
-                        && props.album.authors[0]
-                            ? props.album.authors[0].name
-                            : "No author info provided"
-                        }
-                    </Typography>
                 </CardActions>
             </CardActionArea>
         </Card>

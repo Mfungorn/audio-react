@@ -51,50 +51,22 @@ export const AuthorPage = (props: AuthorPageProps) => {
     const api = useApi();
 
     const [author, setAuthor] = useState<Author>();
-    // const [authorTracks, setAuthorTracks] = useState<Track[]>([]);
-    // const [authorAlbums, setAuthorAlbums] = useState<Album[]>([]);
-    // const [genres, setGenres] = useState<Genre[]>([]);
 
     useEffect(() => {
         (async (id: number): Promise<AxiosResponse<Author>> => await api.fetchAuthor(id))(parseInt(props.id))
             .then(response => {
                 console.log('author page author', response.data);
-                setAuthor(response.data)
+
+                let authorPayload = response.data;
+                authorPayload.albums?.forEach(album => (
+                    album.authorName = authorPayload.name
+                ));
+                setAuthor(authorPayload)
             })
             .catch(error => {
                 toast.error(`Error receiving author: ${error}`);
                 console.log('error', error);
             });
-
-        // (async (id: number): Promise<AxiosResponse<Genre[]>> => await api.fetchAuthorGenres(id))(parseInt(props.id))
-        //     .then(response => {
-        //         console.log('author page genres', response.data);
-        //         setGenres(response.data)
-        //     })
-        //     .catch(error => {
-        //         toast.error(`Error receiving author genres: ${error}`);
-        //         console.log('error', error);
-        //     });
-        //
-        // (async (id: number): Promise<AxiosResponse<Track[]>> => await api.fetchAuthorTracks(id))(parseInt(props.id))
-        //     .then(response => {
-        //         console.log('author page genres', response.data);
-        //         setAuthorTracks(response.data)
-        //     })
-        //     .catch(error => {
-        //         toast.error(`Error receiving author tracks: ${error}`);
-        //         console.log('error', error);
-        //     });
-        //
-        // (async (id: number): Promise<AxiosResponse<Album[]>> => await api.fetchAuthorAlbums(id))(parseInt(props.id))
-        //     .then(response => {
-        //         console.log('author page genres', response.data);
-        //         setAuthorAlbums(response.data)
-        //     })
-        //     .catch(error => {
-        //         toast.error(`Error receiving author albums: ${error}`);
-        //         console.log('error', error);
-        //     })
     }, []);
 
     return (

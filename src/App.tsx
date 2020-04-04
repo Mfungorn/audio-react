@@ -14,7 +14,7 @@ import {ApiContext} from "./components/Authorization/ApiContext";
 import {RegisterPage} from "./components/Register/RegisterPage";
 import api from "./api/auth/Api";
 import {AuthorPage, AuthorPageProps} from "./components/Authors/AuthorPage";
-import {AlbumPage} from "./components/Albums/AlbumPage";
+import {AlbumPage, AlbumPageProps} from "./components/Albums/AlbumPage";
 
 
 const theme = createMuiTheme({
@@ -39,7 +39,9 @@ function App() {
                                 <Route path={Routes.author}
                                        render={(props: RouteComponentProps<AuthorPageProps>) => <AuthorPage
                                            id={props.match.params.id}/>}/>
-                                <Route path={Routes.album} component={AlbumPage}/>
+                                <Route path={Routes.album}
+                                       render={(props: RouteComponentProps<AlbumPageProps>) => <AlbumPage
+                                           id={props.match.params.id}/>}/>
                                 <Redirect to={Routes.home}/>
                             </MainLayout>
                         </Authorize>

@@ -1,11 +1,11 @@
-import {Author} from "./Author";
-
 export type Album = {
     id: string,
     title: string,
     cover: string,
+    year?: number,
     rating: number,
-    authors?: Array<Author>,
-    // genres?: Array<Genre>,
-    // compositions?: Array<Track>,
+    price: number,
+    authorName: string,
+    tracksCount: number,
+    genre: string
 }

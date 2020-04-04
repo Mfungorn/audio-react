@@ -64,23 +64,18 @@ export interface IApi {
     fetchAuthorTracks: (id: number) => Promise<AxiosResponse<Track[]>>;
     fetchAuthorGenres: (id: number) => Promise<AxiosResponse<Genre[]>>;
 
-    fetchAlbums: () => Promise<AxiosResponse<Album[]>>;
     fetchPopularAlbums: () => Promise<AxiosResponse<Album[]>>;
     fetchAlbum: (id: number) => Promise<AxiosResponse<Album>>;
     fetchAlbumTracks: (id: number) => Promise<AxiosResponse<Track[]>>;
-    fetchAlbumGenres: (id: number) => Promise<AxiosResponse<Genre[]>>;
 
     fetchPopularTracks: () => Promise<AxiosResponse<Track[]>>;
     fetchTrack: (id: number) => Promise<AxiosResponse<Track>>;
-    fetchTrackGenres: (id: number) => Promise<AxiosResponse<Genre[]>>;
-
 
     fetchGenres: () => Promise<AxiosResponse<Genre[]>>;
     fetchTracksByGenre: (name: string) => Promise<AxiosResponse<Track[]>>;
 }
 
 class Api implements IApi {
-    // Type any to be discussed
     async login(requisites: ILoginRequisites): Promise<any> {
         const response = await axios.post<ILoginModel>(`${backendUrl}/auth/login`, {
             email: requisites.email,
@@ -163,10 +158,6 @@ class Api implements IApi {
         return axios.get<Genre[]>(`${backendUrl}/authors/${id}/genres`)
     }
 
-    fetchAlbums(): Promise<AxiosResponse<Album[]>> {
-        return axios.get<Album[]>(`${backendUrl}/albums/all`)
-    }
-
     fetchPopularAlbums(): Promise<AxiosResponse<Album[]>> {
         return axios.get<Album[]>(`${backendUrl}/albums/popular`)
     }
@@ -179,20 +170,12 @@ class Api implements IApi {
         return axios.get<Track[]>(`${backendUrl}/albums/${id}/compositions`)
     }
 
-    fetchAlbumGenres(id: number): Promise<AxiosResponse<Genre[]>> {
-        return axios.get<Genre[]>(`${backendUrl}/albums/${id}/genres`)
-    }
-
     fetchPopularTracks(): Promise<AxiosResponse<Track[]>> {
         return axios.get<Track[]>(`${backendUrl}/compositions/popular`)
     }
 
     fetchTrack(id: number): Promise<AxiosResponse<Track>> {
         return axios.get<Track>(`${backendUrl}/compositions/${id}`)
-    }
-
-    fetchTrackGenres(id: number): Promise<AxiosResponse<Genre[]>> {
-        return axios.get<Genre[]>(`${backendUrl}/compositions/${id}/genres`)
     }
 
     fetchGenres(): Promise<AxiosResponse<Genre[]>> {
