@@ -47,7 +47,7 @@ export const AuthorList = (props: AuthorListProps) => {
     return (
         <Grid container className={classes.flexContainer} spacing={2}>
             <Grid item container justify="flex-start">
-                <Typography variant="h4">
+                <Typography variant="h4" id="authors-title">
                     Popular authors
                 </Typography>
             </Grid>
