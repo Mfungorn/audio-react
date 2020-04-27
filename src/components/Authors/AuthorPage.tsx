@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import {Chip, createStyles, Grid, Paper, Theme, Typography} from "@material-ui/core";
 import {Author} from "../../domain/models/Author";
-import {useApi} from "../Authorization/ApiContext";
+import {useApi} from "../../api/ApiContext";
 import {AxiosResponse} from 'axios';
 import {toast} from "react-toastify";
 import {AuthorTabs} from "./AuthorTabs";

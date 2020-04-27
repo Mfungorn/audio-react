@@ -10,11 +10,12 @@ import {LoginPage} from "./components/Login/LoginPage";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Authorize from "./components/Authorization/Authorize";
-import {ApiContext} from "./components/Authorization/ApiContext";
+import {ApiContext} from "./api/ApiContext";
 import {RegisterPage} from "./components/Register/RegisterPage";
-import api from "./api/auth/Api";
+import api from "./api/Api";
 import {AuthorPage, AuthorPageProps} from "./components/Authors/AuthorPage";
 import {AlbumPage, AlbumPageProps} from "./components/Albums/AlbumPage";
+import {ProfilePage} from "./components/Profile/ProfilePage";
 
 
 const theme = createMuiTheme({
@@ -36,6 +37,7 @@ function App() {
                         <Authorize>
                             <MainLayout>
                                 <Route exact path={Routes.home} component={HomePage}/>
+                                <Route exact path={Routes.profile} component={ProfilePage}/>
                                 <Route path={Routes.author}
                                        render={(props: RouteComponentProps<AuthorPageProps>) => <AuthorPage
                                            id={props.match.params.id}/>}/>

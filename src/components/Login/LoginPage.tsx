@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import {useHistory} from "react-router";
 import {ThemedButton} from "../ThemedButton";
 import {Button, CircularProgress, Grid} from "@material-ui/core";
-import {useApi} from "../Authorization/ApiContext";
+import {useApi} from "../../api/ApiContext";
 import {Redirect} from "react-router-dom";
 import {Routes} from "../../Routes";
 import {toast} from "react-toastify";
@@ -66,7 +66,7 @@ export const LoginPage = () => {
     const history = useHistory();
 
     const onSignUpButtonClicked = (event: any) => {
-        history.push("/register")
+        history.push(Routes.register)
     };
 
     return state.loggedIn

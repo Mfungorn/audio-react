@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {Routes} from "../../Routes";
-import {useApi} from "./ApiContext";
+import {useApi} from "../../api/ApiContext";
 
 const Authorize: React.FC = props => {
     const auth = useApi();

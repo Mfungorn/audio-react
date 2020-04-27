@@ -22,8 +22,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PersonIcon from '@material-ui/icons/Person';
 import {makeStyles} from "@material-ui/core/styles";
-import {useApi} from "../Authorization/ApiContext";
+import {useApi} from "../../api/ApiContext";
 import {useHistory, useLocation} from "react-router-dom";
+import {Routes} from "../../Routes";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -63,6 +64,8 @@ const NavMenu = () => {
 
     const [locations, setLocations] = useState([useLocation()]);
 
+    const [title, setTitle] = useState<String>("Audio");
+
     useEffect(() => {
         history.listen((location, action) => {
             if (action === 'REPLACE') {
@@ -75,6 +78,21 @@ const NavMenu = () => {
                 setLocations(locations.filter((value) => (
                     value !== location
                 )))
+            }
+            switch (location.pathname) {
+                case Routes.home:
+                    setTitle("Audio");
+                    break;
+                case Routes.profile:
+                    setTitle("Your profile");
+                    break;
+                default:
+                    if (location.pathname.startsWith("/author")) {
+                        setTitle("Performer")
+                    } else if (location.pathname.startsWith("/album")) {
+                        setTitle("Album")
+                    } else
+                        setTitle("Audio")
             }
         });
     }, []);
@@ -89,10 +107,14 @@ const NavMenu = () => {
         setMenuOpened(!isMenuOpened)
     };
 
+    const handleProfileClick = () => {
+        history.push(Routes.profile)
+    }
+
     const loginLogoutSection = () => {
         return userSession != null ? (
             <Box>
-                <IconButton color="inherit" aria-label="add an alarm">
+                <IconButton color="inherit" aria-label="add an alarm" onClick={handleProfileClick}>
                     <Avatar>{userSession.email.charAt(0)}</Avatar>
                 </IconButton>
                 <Button color="inherit">Logout</Button>
@@ -107,7 +129,10 @@ const NavMenu = () => {
             <Grow {...TransitionProps} style={{transformOrigin: 'center top'}}>
                 <Paper><ClickAwayListener onClickAway={handleMenuStateChange}>
                     <MenuList>
-                        <MenuItem onClick={handleMenuStateChange}>
+                        <MenuItem onClick={(e) => {
+                            handleMenuStateChange()
+                            handleProfileClick()
+                        }}>
                             <ListItemIcon>
                                 <PersonIcon/>
                             </ListItemIcon>
@@ -132,9 +157,7 @@ const NavMenu = () => {
                                       onClick={handleMenuStateChange}>
                             <MenuIcon/>
                         </IconButton>}
-                    <Typography variant="h6" className={classes.title}>
-                        Audio
-                    </Typography>
+                    <Typography variant="h6" className={classes.title}>{title}</Typography>
                     {menuPopperSection()}
                     {loginLogoutSection()}
                 </Toolbar>

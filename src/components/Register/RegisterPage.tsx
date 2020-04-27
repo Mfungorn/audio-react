@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import {useHistory} from "react-router";
 import {CircularProgress, Grid, Typography} from "@material-ui/core";
 import {ThemedButton} from "../ThemedButton";
-import {useApi} from "../Authorization/ApiContext";
+import {useApi} from "../../api/ApiContext";
 
 
 export const RegisterPage = () => {

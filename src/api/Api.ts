@@ -1,9 +1,10 @@
 import axiosGlobal, {AxiosResponse} from "axios";
 import jwt_decode from "jwt-decode";
-import {Author} from "../../domain/models/Author";
-import {Album} from "../../domain/models/Album";
-import {Track} from "../../domain/models/Track";
-import {Genre} from "../../domain/models/Genre";
+import {Author} from "../domain/models/Author";
+import {Album} from "../domain/models/Album";
+import {Track} from "../domain/models/Track";
+import {Genre} from "../domain/models/Genre";
+import {Profile} from "../domain/models/Profile";
 
 const axios = axiosGlobal.create();
 
@@ -56,6 +57,8 @@ export interface IApi {
     check: () => Promise<any>;
     clearSession: () => void;
     readonly userSession: IUserSession;
+
+    fetchProfile: () => Promise<AxiosResponse<Profile>>;
 
     fetchAuthors: () => Promise<AxiosResponse<Author[]>>;
     fetchPopularAuthors: () => Promise<AxiosResponse<Author[]>>;
@@ -132,6 +135,10 @@ class Api implements IApi {
         if (localStorage.getItem("session")) {
             localStorage.removeItem("session");
         }
+    }
+
+    fetchProfile(): Promise<AxiosResponse<Profile>> {
+        return axios.get<Profile>(`${backendUrl}/user/profile`)
     }
 
     fetchAuthors(): Promise<AxiosResponse<Author[]>> {

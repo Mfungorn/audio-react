@@ -15,7 +15,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {Album} from "../../domain/models/Album";
-import {useApi} from "../Authorization/ApiContext";
+import {useApi} from "../../api/ApiContext";
 import {AxiosResponse} from 'axios';
 import {toast} from "react-toastify";
 import {Track} from "../../domain/models/Track";

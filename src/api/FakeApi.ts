@@ -1,15 +1,8 @@
-import {
-    IApi,
-    ILoginModel,
-    ILoginRequisites,
-    IRegisterRequisites,
-    IUserSession,
-    IUserSessionJwtData
-} from "./Api";
-import {Album} from "../../domain/models/Album";
-import {Genre} from "../../domain/models/Genre";
-import {Track} from "../../domain/models/Track";
-import {Author} from "../../domain/models/Author";
+import {IApi, ILoginModel, ILoginRequisites, IRegisterRequisites, IUserSession, IUserSessionJwtData} from "./Api";
+import {Album} from "../domain/models/Album";
+import {Genre} from "../domain/models/Genre";
+import {Track} from "../domain/models/Track";
+import {Author} from "../domain/models/Author";
 import {AxiosResponse} from "axios";
 
 export class FakeApi implements IApi {
@@ -58,6 +51,10 @@ export class FakeApi implements IApi {
         if (localStorage.getItem("session")) {
             localStorage.removeItem("session");
         }
+    }
+
+    fetchProfile(): Promise<AxiosResponse> {
+        throw new Error("Not implemented")
     }
 
     fetchAlbum(id: number): Promise<AxiosResponse<Album>> {

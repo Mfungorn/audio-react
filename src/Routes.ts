@@ -3,5 +3,6 @@ export const Routes = {
     register: "/register",
     home: "/home",
     author: "/authors/:id",
-    album: "/albums/:id"
+    album: "/albums/:id",
+    profile: "/profile"
 };

@@ -3,7 +3,7 @@ import {Box, CircularProgress} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Author} from "../domain/models/Author";
 import {Album} from "../domain/models/Album";
-import {useApi} from "./Authorization/ApiContext";
+import {useApi} from "../api/ApiContext";
 import {AxiosResponse} from "axios";
 import {AuthorList} from "./Authors/AuthorList/AuthorList";
 import {AlbumList} from "./Albums/AlbumList/AlbumList";
