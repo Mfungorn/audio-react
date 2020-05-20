@@ -43,6 +43,19 @@ const useStyles = makeStyles((theme: Theme) =>
         field: {
             paddingTop: theme.spacing(1),
         },
+        balanceField: {
+            display: 'inline',
+        },
+        addBalanceIcon: {
+            height: 16,
+            width: 16,
+        },
+        addBalanceButton: {
+            paddingTop: 0,
+            paddingLeft: 4,
+            paddingBottom: 2,
+            paddingRight: 0
+        },
         trackItem: {
             borderRadius: theme.spacing(4)
         },
@@ -91,8 +104,11 @@ export const ProfilePage = () => {
                                 <Typography variant="h3">{profile?.name}</Typography>
                                 <Divider/>
                                 <Typography className={classes.field} variant="body2">{profile?.email}</Typography>
-                                <Typography className={classes.field} variant="body2" color="textSecondary">Your
+                                <Typography className={classes.balanceField} variant="body2" color="textSecondary">Your
                                     balance: {profile?.balance || 0}</Typography>
+                                <IconButton className={classes.addBalanceButton}>
+                                    <AddCircleIcon className={classes.addBalanceIcon}/>
+                                </IconButton>
                                 {profile?.phone &&
                                 <Typography variant="body2" color="textSecondary">Phone
                                     number: {profile?.phone}</Typography>}

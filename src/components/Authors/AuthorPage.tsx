@@ -7,6 +7,7 @@ import {useApi} from "../../api/ApiContext";
 import {AxiosResponse} from 'axios';
 import {toast} from "react-toastify";
 import {AuthorTabs} from "./AuthorTabs";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 
 
 export interface AuthorPageProps {
@@ -38,6 +39,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         nested: {
             padding: theme.spacing(2),
+        },
+        favorites: {
+            marginLeft: 2,
+            marginTop: 2,
+            marginRight: 2,
+            height: 16,
+            width: 16
         },
         genres: {
             marginTop: theme.spacing(1),
@@ -94,6 +102,10 @@ export const AuthorPage = (props: AuthorPageProps) => {
                                             <Chip label={genre.name}/>
                                         </Grid>
                                     ))}
+                                </Grid>
+                                <Grid container direction="row">
+                                    <FavoriteIcon className={classes.favorites}/>
+                                    <Typography variant="subtitle2"> • {author?.rating || 0}</Typography>
                                 </Grid>
                             </Grid>
                             {/*<ListItem button onClick={handleClick}>*/}
