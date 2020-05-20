@@ -9,6 +9,7 @@ import {
     List,
     ListItem,
     ListItemIcon,
+    ListItemSecondaryAction,
     ListItemText,
     Paper,
     Theme,
@@ -21,6 +22,7 @@ import {toast} from "react-toastify";
 import {Track} from "../../domain/models/Track";
 import {MusicNoteOutlined} from "@material-ui/icons";
 import AlbumIcon from "@material-ui/icons/Album";
+import {formatDuration} from "../../helpers/timeDurationFormatter";
 
 
 export interface AlbumPageProps {
@@ -141,6 +143,9 @@ export const AlbumPage = (props: AlbumPageProps) => {
                                             <MusicNoteOutlined/>
                                         </ListItemIcon>
                                         <ListItemText primary={track.title}/>
+                                        <ListItemSecondaryAction>
+                                            <Typography variant="body1">{formatDuration(track.duration)}</Typography>
+                                        </ListItemSecondaryAction>
                                     </ListItem>
                                 ))}
                             </List> : <CircularProgress size={24}/>}

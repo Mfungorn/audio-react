@@ -6,9 +6,11 @@ import {
     createStyles,
     Divider,
     Grid,
+    IconButton,
     List,
     ListItem,
     ListItemIcon,
+    ListItemSecondaryAction,
     ListItemText,
     Paper,
     Theme,
@@ -20,7 +22,9 @@ import {toast} from "react-toastify";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FaceIcon from '@material-ui/icons/Face';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {Profile} from "../../domain/models/Profile";
+import {formatDuration} from "../../helpers/timeDurationFormatter";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -110,6 +114,9 @@ export const ProfilePage = () => {
                                             <FavoriteIcon/>
                                         </ListItemIcon>
                                         <ListItemText primary={track.title}/>
+                                        <ListItemSecondaryAction>
+                                            <Typography variant="body1">{formatDuration(track.duration)}</Typography>
+                                        </ListItemSecondaryAction>
                                     </ListItem>
                                 ))}
                             </List> : <CircularProgress size={24}/>}

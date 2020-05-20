@@ -8,6 +8,7 @@ import {
     List,
     ListItem,
     ListItemIcon,
+    ListItemSecondaryAction,
     ListItemText,
     Theme,
     Typography
@@ -19,6 +20,7 @@ import {Track} from "../../domain/models/Track";
 import {Album} from "../../domain/models/Album";
 import {MusicNoteOutlined} from "@material-ui/icons";
 import {AlbumItem} from "../Albums/AlbumList/AlbumItem";
+import {formatDuration} from "../../helpers/timeDurationFormatter";
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -109,6 +111,9 @@ export const AuthorTabs = (props: AuthorTabsProps) => {
                                 <MusicNoteOutlined/>
                             </ListItemIcon>
                             <ListItemText primary={track.title}/>
+                            <ListItemSecondaryAction>
+                                <Typography variant="body1">{formatDuration(track.duration)}</Typography>
+                            </ListItemSecondaryAction>
                         </ListItem>
                     ))}
                 </List>
