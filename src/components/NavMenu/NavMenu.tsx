@@ -63,7 +63,6 @@ const NavMenu = () => {
     const history = useHistory();
 
     const [locations, setLocations] = useState([useLocation()]);
-
     const [title, setTitle] = useState<String>("Audio");
 
     useEffect(() => {
@@ -114,10 +113,13 @@ const NavMenu = () => {
     const loginLogoutSection = () => {
         return userSession != null ? (
             <Box>
-                <IconButton color="inherit" aria-label="add an alarm" onClick={handleProfileClick}>
+                <IconButton color="inherit" aria-label="profile" onClick={handleProfileClick}>
                     <Avatar>{userSession.email.charAt(0)}</Avatar>
                 </IconButton>
-                <Button color="inherit">Logout</Button>
+                <Button color="inherit" onClick={() => {
+                    auth.clearSession()
+                    window.location.reload()
+                }}>Logout</Button>
             </Box>
         ) : (
             <Button color="inherit">Login</Button>
